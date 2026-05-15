@@ -2937,10 +2937,10 @@
               </thead>
               <tbody id="setterTableBody">
                 <tr class="goal-row">
-                  <td></td><td>GOAL</td><td></td><td>1,600</td><td>100</td><td>180</td><td>&lt;20%</td><td>&lt;20%</td><td>&gt;15%</td><td>&gt;75%</td><td>&gt;$20k</td><td></td><td></td><td>22</td><td>176</td><td>&gt;60%</td><td>&gt;10</td><td>&gt;5</td><td>once a week</td><td></td>
+                  <td></td><td>GOAL</td><td>250</td><td>1,600</td><td>100</td><td>180</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>22</td><td>160</td><td></td><td></td><td></td><td></td><td></td>
                 </tr>
                 <tr class="weight-row">
-                  <td style="font-weight:700">RANK</td><td>WEIGHTED AVE</td><td></td><td></td><td></td><td></td><td>10%</td><td>10%</td><td>20%</td><td>20%</td><td>20%</td><td></td><td></td><td></td><td></td><td></td><td>10%</td><td>10%</td><td></td><td></td>
+                  <td style="font-weight:700">RANK</td><td>WEIGHTED AVE</td><td>8%</td><td>8%</td><td>8%</td><td>10%</td><td></td><td></td><td>5%</td><td>5%</td><td>5%</td><td>10%</td><td>20%</td><td></td><td></td><td></td><td>5%</td><td>6%</td><td>5%</td><td>5%</td><td></td><td></td>
                 </tr>
               </tbody>
             </table>
@@ -3480,10 +3480,190 @@
       </div>
     </div>
   </div>
-  <div class="dept-placeholder" id="dept-csm-t2">
-    <h2>CSM T2 Department</h2>
-    <p>Source data pending.</p>
-    <p>CSM T2 will be wired after the Google Sheet tab and KPI columns are provided.</p>
+  <div class="dept-section" id="dept-csm-t2" style="display:none;">
+    <div class="header" id="csm2Header">
+      <div class="header-left">
+        <div class="logo-mark" id="csm2LogoMark"></div>
+        <div class="header-title">
+          <h1>Let's Get Funded</h1>
+          <div class="dept" id="csm2DeptName">CSM T2 Department</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="header-date" id="csm2HeaderDate">Loading...</div>
+        <div class="header-updated">Updated: <span id="csm2LastUpdated">&#8212;</span></div>
+      </div>
+    </div>
+
+    <div class="stats-bar" id="csm2StatsBar"></div>
+
+    <div class="tab-nav" id="csm2TabNav">
+      <button class="tab-btn active" onclick="switchCsm2Tab(event,'dashboard')">Dashboard</button>
+      <button class="tab-btn" onclick="switchCsm2Tab(event,'calculator')">Forecasting Calculator</button>
+      <button class="tab-btn" onclick="switchCsm2Tab(event,'history')">History</button>
+    </div>
+
+    <!-- CSM T2 DASHBOARD TAB -->
+    <div class="tab-content active" id="tab-csm2-dashboard">
+      <div id="csm2LoadingIndicator" class="loading">
+        <div class="spinner"></div><br>
+        Loading dashboard...
+      </div>
+
+      <div id="csm2DashboardContent" style="display:none;">
+        <div class="table-card">
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th>Show Rate</th>
+                  <th>Cancellation Rate</th>
+                  <th>No Show<br>Rate</th>
+                  <th>Personal Loans Scheduled</th>
+                  <th>Approved Personal Loans Amount</th>
+                  <th># of Approved P-Loan</th>
+                  <th>P-Loan Approval Rate</th>
+                  <th># of Meetings</th>
+                  <th># of Endorsed File</th>
+                  <th>Endorsement Rate</th>
+                  <th>Handled Endorsement Volume</th>
+                  <th>Monthly KPI Score</th>
+                </tr>
+              </thead>
+              <tbody id="csm2TableBody">
+                <tr class="goal-row">
+                  <td></td><td>GOAL</td><td>&ge;75%</td><td>&le;10%</td><td>&le;15%</td><td>-</td><td>&gt;$70k</td><td>&gt;2</td><td>-</td><td>-</td><td>&ge;24</td><td>&ge;20%</td><td>&gt;10</td><td>100%</td>
+                </tr>
+                <tr class="weight-row">
+                  <td style="font-weight:700">RANK</td><td>WEIGHTED AVE</td><td>20%</td><td>10%</td><td>10%</td><td>-</td><td>10%</td><td>10%</td><td>-</td><td>-</td><td>20%</td><td>10%</td><td>10%</td><td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="csm2MobileCardsContainer"></div>
+
+        <div style="text-align:center; margin: 24px 0 8px;">
+          <button class="leadership-brief-btn" onclick="openCsm2LeadershipBrief()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            Performance Analysis
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CSM T2 CALCULATOR TAB -->
+    <div class="tab-content" id="tab-csm2-calculator">
+      <div class="calc-card">
+        <h2>Forecasting Calculator</h2>
+        <p class="calc-subtitle">See what each CSM T2 member needs to improve KPI rank and close the performance gap</p>
+        <div class="calc-grid">
+          <div class="calc-field">
+            <label>Your Name</label>
+            <select id="csm2CalcName"><option value="">Select CSM T2 member...</option></select>
+          </div>
+          <div class="calc-field">
+            <label>Target Rank</label>
+            <select id="csm2CalcTargetRank">
+              <option value="1">Rank 1</option>
+              <option value="2">Rank 2</option>
+              <option value="3">Rank 3</option>
+            </select>
+          </div>
+          <div class="calc-field">
+            <label>Days Left in Month</label>
+            <input type="number" id="csm2CalcDaysLeft" min="0" max="31" readonly style="opacity:0.7;cursor:default;">
+          </div>
+        </div>
+        <button class="calc-btn" onclick="runCsm2Forecast()">Calculate</button>
+        <div class="calc-results" id="csm2CalcResults">
+          <h3>What you need to hit</h3>
+          <div class="result-grid" id="csm2ResultGrid"></div>
+        </div>
+        <div class="ai-analysis" id="csm2AiAnalysis" style="display:none;">
+          <div class="ai-analysis-header">
+            <span class="ai-icon">&#9889;</span>
+            <h3>Performance Analysis</h3>
+          </div>
+          <div class="ai-analysis-body" id="csm2AiAnalysisBody"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CSM T2 HISTORY TAB -->
+    <div class="tab-content" id="tab-csm2-history">
+      <div class="history-card">
+        <h2>Historical Performance</h2>
+        <p class="history-subtitle">Current CSM T2 source snapshot from the Google Sheet tab</p>
+
+        <div class="month-selector">
+          <button class="month-pill csm2-month-pill active" data-csm2-month="Current" onclick="showCsm2History('Current')">Current</button>
+        </div>
+
+        <div id="csm2HistorySummary" class="history-summary">
+          <div class="summary-card">
+            <div class="summary-label">Team Show Rate</div>
+            <div class="summary-value" id="csm2HistoryShowRate">0%</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Endorsed Files</div>
+            <div class="summary-value" id="csm2HistoryEndorsed">0</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Approval Amount</div>
+            <div class="summary-value" id="csm2HistoryApproved">$0</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Avg KPI Score</div>
+            <div class="summary-value" id="csm2HistoryKPI">0%</div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th>Show Rate</th>
+                  <th>Cancellation Rate</th>
+                  <th>No Show<br>Rate</th>
+                  <th>Personal Loans Scheduled</th>
+                  <th>Approved Personal Loans Amount</th>
+                  <th># of Approved P-Loan</th>
+                  <th>P-Loan Approval Rate</th>
+                  <th># of Meetings</th>
+                  <th># of Endorsed File</th>
+                  <th>Endorsement Rate</th>
+                  <th>Handled Endorsement Volume</th>
+                  <th>Monthly KPI Score</th>
+                </tr>
+              </thead>
+              <tbody id="csm2HistoryTableBody">
+                <tr class="goal-row">
+                  <td></td><td>GOAL</td><td>&ge;75%</td><td>&le;10%</td><td>&le;15%</td><td>-</td><td>&gt;$70k</td><td>&gt;2</td><td>-</td><td>-</td><td>&ge;24</td><td>&ge;20%</td><td>&gt;10</td><td>100%</td>
+                </tr>
+                <tr class="weight-row">
+                  <td style="font-weight:700">RANK</td><td>WEIGHTED AVE</td><td>20%</td><td>10%</td><td>10%</td><td>-</td><td>10%</td><td>10%</td><td>-</td><td>-</td><td>20%</td><td>10%</td><td>10%</td><td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CSM T2 LEADERSHIP BRIEF MODAL -->
+    <div class="modal-backdrop" id="csm2BriefModal">
+      <div class="modal-content">
+        <span class="modal-close" onclick="closeCsm2LeadershipBrief()">&times;</span>
+        <div id="csm2BriefContent"></div>
+      </div>
+    </div>
   </div>
   <div class="dept-placeholder" id="dept-csr">
     <h2>CSR Department</h2>
@@ -4146,6 +4326,852 @@ window.openCsmLeadershipBrief = openCsmLeadershipBrief;
 window.closeCsmLeadershipBrief = closeCsmLeadershipBrief;
 window.loadCsmData = loadCsmData;
 if (location.hash.replace('#','') === 'csm' || location.hash.replace('#','') === 'csm-t1') setTimeout(showCsmDept, 350);
+})();
+</script>
+
+<script>
+// Funding February, Setters source alignment, and CSM T2 dashboard extension.
+(function(){
+function hasFn(name) { return typeof window[name] === 'function'; }
+function csvLine(line) { return hasFn('parseCSVLine') ? parseCSVLine(line) : line.split(','); }
+function num(v) {
+  if (typeof parseNum === 'function') return parseNum(v);
+  var n = parseFloat(String(v || '').replace(/[$,%\s,]/g, ''));
+  return isNaN(n) ? 0 : n;
+}
+function pct(v) {
+  if (typeof parsePct === 'function') return parsePct(v);
+  return num(v);
+}
+function mon(v) {
+  if (typeof parseMon === 'function') return parseMon(v);
+  return num(v);
+}
+function formatMoneyExact(value) {
+  var amount = Number(value || 0);
+  if (!isFinite(amount)) amount = 0;
+  return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+if (typeof fmtMoney === 'function') {
+  fmtMoney = formatMoneyExact;
+}
+function money(v) {
+  return formatMoneyExact(v);
+}
+function percent(v) {
+  if (typeof fmtPct === 'function') return fmtPct(v || 0);
+  return (v || 0).toFixed(1) + '%';
+}
+function rankClass(score) {
+  if (typeof rankCls === 'function') return rankCls(score || 0);
+  return score >= 90 ? 'kpi-excellent' : score >= 70 ? 'kpi-good' : score >= 50 ? 'kpi-average' : 'kpi-poor';
+}
+function valueClass(actual, goal) {
+  if (typeof colorCls === 'function') return colorCls(actual || 0, goal || 0);
+  return (actual || 0) >= (goal || 0) ? 'c-green' : 'c-red';
+}
+function lowerValueClass(actual, goal) {
+  return (actual || 0) <= (goal || 0) ? 'c-green' : 'c-red';
+}
+function kpiBar(score) {
+  if (typeof mkKPIBar === 'function') return mkKPIBar(score || 0);
+  return '<span class="kpi-pill '+rankClass(score || 0)+'">'+(score || 0).toFixed(2)+'%</span>';
+}
+function avatar(name, rank, clickable) {
+  if (typeof getAvatar === 'function') return getAvatar(name, rank, clickable);
+  var initials = String(name || '').split(/\s+/).map(function(w){ return w[0]; }).join('').slice(0,2);
+  return '<div class="avatar avatar-placeholder avatar-rank-default">'+initials+'</div>';
+}
+function goalRatio(actual, goal) {
+  return goal ? Math.min((actual || 0) / goal, 1) : 0;
+}
+function lowGoalRatio(actual, goal) {
+  if (!goal) return 0;
+  return (actual || 0) <= goal ? 1 : Math.max(0, 1 - ((actual || 0) - goal) / goal);
+}
+function setText(id, value) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = value;
+}
+function stat(label, value, sub, cls) {
+  return '<div class="stat-card '+(cls || '')+'"><div><div class="stat-label">'+label+'</div><div class="stat-value">'+value+'</div></div><div class="stat-sub">'+(sub || '')+'</div></div>';
+}
+function daysLeftInMonth() {
+  var now = new Date();
+  var last = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  return Math.max(0, last - now.getDate());
+}
+var SOURCE_SHEET_ID = '12glaANnP2BsQfH_kHfRlzA40JdWAU-PJgDT-56yRV8k';
+function getSheetCsvUrl(sheetName) {
+  return 'https://docs.google.com/spreadsheets/d/' + SOURCE_SHEET_ID + '/gviz/tq?tqx=out:csv&sheet=' + encodeURIComponent(sheetName);
+}
+if (typeof HISTORY_SHEET_URLS !== 'undefined') {
+  HISTORY_SHEET_URLS['Feb 2026'] = getSheetCsvUrl('Closers - History - February 2026');
+  HISTORY_SHEET_URLS['Mar 2026'] = getSheetCsvUrl('Closers - History - March 2026');
+  HISTORY_SHEET_URLS['Apr 2026'] = getSheetCsvUrl('Closers - History - April 2026 ');
+}
+if (typeof SETTER_SHEET_URL !== 'undefined') {
+  SETTER_SHEET_URL = getSheetCsvUrl('Setters');
+}
+if (typeof SETTER_HISTORY_URLS !== 'undefined') {
+  SETTER_HISTORY_URLS['Feb 2026'] = getSheetCsvUrl('Setters - February 2026');
+  SETTER_HISTORY_URLS['Mar 2026'] = getSheetCsvUrl('Setters - March 2026');
+  SETTER_HISTORY_URLS['Apr 2026'] = getSheetCsvUrl('Setters - April 2026');
+}
+if (typeof FUNDING_SHEET_URL !== 'undefined') {
+  FUNDING_SHEET_URL = getSheetCsvUrl('Funding');
+}
+if (typeof FUNDING_HISTORY_URLS !== 'undefined') {
+  FUNDING_HISTORY_URLS['Feb 2026'] = getSheetCsvUrl('Funding - February 2026');
+  FUNDING_HISTORY_URLS['Mar 2026'] = getSheetCsvUrl('Funding - March 2026');
+  FUNDING_HISTORY_URLS['Apr 2026'] = getSheetCsvUrl('Funding - April 2026');
+}
+
+var FUNDING_FEBRUARY_2026_FIX = {
+  month: 'February 2026',
+  goals: { showRate:90, invoiceGenerated:30000, cashCollected:20000, ploansScheduled:5, approvedPloansAmount:50000, bizFundingScheduled:50, approvedBizFundingAmount:500000 },
+  weights: { showRate:0.10, invoiceGenerated:0.20, cashCollected:0.20, ploansScheduled:0.05, approvedPloansAmount:0.20, bizFundingScheduled:0.05, approvedBizFundingAmount:0.20 },
+  funding: [
+    { name:"KYLE", showRate:83.50, invoiceGenerated:31875, cashCollected:24830, appsSubmitted:47, ploansScheduled:5, approvedPloansAmount:61185, bizFundingScheduled:42, approvedBizFundingAmount:397500, reviewsCollected:1, kpiScore:94.4 },
+    { name:"ARNOLD", showRate:82.63, invoiceGenerated:48340, cashCollected:41042.50, appsSubmitted:108, ploansScheduled:5, approvedPloansAmount:0, bizFundingScheduled:104, approvedBizFundingAmount:681800, reviewsCollected:1, kpiScore:79.2 },
+    { name:"DANO", showRate:76.56, invoiceGenerated:17022.50, cashCollected:12630, appsSubmitted:33, ploansScheduled:2, approvedPloansAmount:40000, bizFundingScheduled:32, approvedBizFundingAmount:223900, reviewsCollected:0, kpiScore:62.6 }
+  ],
+  team: { showRate:80.90, invoiceGenerated:97237.50, cashCollected:78502.50, appsSubmitted:188, ploansScheduled:12, approvedPloansAmount:101185, bizFundingScheduled:178, approvedBizFundingAmount:1303200, reviewsCollected:2, kpiScore:78.7 }
+};
+var FUNDING_MARCH_2026_SOURCE_FIX = {
+  month: 'March 2026',
+  goals: { showRate:90, invoiceGenerated:30000, cashCollected:20000, ploansScheduled:5, approvedPloansAmount:50000, bizFundingScheduled:50, approvedBizFundingAmount:500000 },
+  weights: { showRate:0.10, invoiceGenerated:0.20, cashCollected:0.20, ploansScheduled:0.05, approvedPloansAmount:0.20, bizFundingScheduled:0.05, approvedBizFundingAmount:0.20 },
+  funding: [
+    { name:"ARNOLD", showRate:86.73, invoiceGenerated:67041.50, cashCollected:43895.00, appsSubmitted:114, ploansScheduled:3, approvedPloansAmount:0, bizFundingScheduled:112, approvedBizFundingAmount:874000, reviewsCollected:0, kpiScore:77.6 },
+    { name:"KYLE", showRate:74.19, invoiceGenerated:51432.50, cashCollected:27412.50, appsSubmitted:45, ploansScheduled:0, approvedPloansAmount:0, bizFundingScheduled:45, approvedBizFundingAmount:636000, reviewsCollected:0, kpiScore:72.7 },
+    { name:"JOSE", showRate:92.00, invoiceGenerated:24600.00, cashCollected:11925.00, appsSubmitted:32, ploansScheduled:1, approvedPloansAmount:0, bizFundingScheduled:34, approvedBizFundingAmount:327500, reviewsCollected:1, kpiScore:55.8 },
+    { name:"DANO", showRate:83.33, invoiceGenerated:16400.00, cashCollected:11887.50, appsSubmitted:21, ploansScheduled:0, approvedPloansAmount:0, bizFundingScheduled:23, approvedBizFundingAmount:220000, reviewsCollected:0, kpiScore:43.2 },
+    { name:"THOMAS", showRate:80.00, invoiceGenerated:15812.50, cashCollected:6812.50, appsSubmitted:16, ploansScheduled:0, approvedPloansAmount:0, bizFundingScheduled:16, approvedBizFundingAmount:202500, reviewsCollected:0, kpiScore:35.9 },
+    { name:"BIKRAM", showRate:75.56, invoiceGenerated:8775.00, cashCollected:2875.00, appsSubmitted:25, ploansScheduled:0, approvedPloansAmount:0, bizFundingScheduled:16, approvedBizFundingAmount:130000, reviewsCollected:0, kpiScore:23.9 }
+  ],
+  team: { showRate:81.97, invoiceGenerated:184061.50, cashCollected:104807.50, appsSubmitted:253, ploansScheduled:4, approvedPloansAmount:0, bizFundingScheduled:246, approvedBizFundingAmount:2390000, reviewsCollected:1, kpiScore:51.5 }
+};
+if (typeof FUNDING_HISTORY_DATA !== 'undefined') {
+  FUNDING_HISTORY_DATA['Feb 2026'] = FUNDING_FEBRUARY_2026_FIX;
+  FUNDING_HISTORY_DATA['Mar 2026'] = FUNDING_MARCH_2026_SOURCE_FIX;
+  if (FUNDING_HISTORY_DATA['Apr 2026']) {
+    FUNDING_HISTORY_DATA['Apr 2026'].team = { showRate:87.81, invoiceGenerated:184407.00, cashCollected:120399.50, appsSubmitted:279, ploansScheduled:4, approvedPloansAmount:161000.00, bizFundingScheduled:162, approvedBizFundingAmount:2348500.00, reviewsCollected:0, kpiScore:70.9 };
+  }
+}
+function fundingColumnMap(cols) {
+  var expanded = cols.length > 15 && String(cols[6] || '').indexOf('%') !== -1 && (String(cols[7] || '').indexOf('$') !== -1 || num(cols[7]) > 0);
+  return expanded ?
+    { show:6, invoice:7, cash:8, apps:9, ploans:10, approvedPloans:11, biz:12, approvedBiz:13, reviews:14, kpi:15 } :
+    { show:2, invoice:3, cash:4, apps:5, ploans:6, approvedPloans:7, biz:8, approvedBiz:9, reviews:10, kpi:11 };
+}
+function parseFundingRow(cols) {
+  var map = fundingColumnMap(cols);
+  return {
+    name: String(cols[1] || '').trim().toUpperCase(),
+    showRate: pct(cols[map.show]),
+    invoiceGenerated: mon(cols[map.invoice]),
+    cashCollected: mon(cols[map.cash]),
+    appsSubmitted: num(cols[map.apps]),
+    ploansScheduled: num(cols[map.ploans]),
+    approvedPloansAmount: mon(cols[map.approvedPloans]),
+    bizFundingScheduled: num(cols[map.biz]),
+    approvedBizFundingAmount: mon(cols[map.approvedBiz]),
+    reviewsCollected: num(cols[map.reviews]),
+    kpiScore: pct(cols[map.kpi])
+  };
+}
+function fundingRowsFromCsv(csv) {
+  var lines = String(csv || '').trim().split(/\r?\n/);
+  var data = [];
+  for (var i = 0; i < lines.length; i++) {
+    var cols = csvLine(lines[i]);
+    var nameRaw = cols[1] ? cols[1].trim().toUpperCase() : '';
+    if (!nameRaw || nameRaw === 'NAME' || nameRaw.indexOf('GOAL') >= 0 || nameRaw === 'WEIGHTED AVE') continue;
+    if (nameRaw === 'TEAM') break;
+    var rank = cols[0] ? cols[0].trim() : '';
+    if (!rank || isNaN(parseInt(rank, 10))) continue;
+    var row = parseFundingRow(cols);
+    row.rank = parseInt(rank, 10);
+    data.push(row);
+  }
+  return data;
+}
+function fundingTeamFromCsv(csv) {
+  var lines = String(csv || '').trim().split(/\r?\n/);
+  for (var i = 0; i < lines.length; i++) {
+    var cols = csvLine(lines[i]);
+    var nameRaw = cols[1] ? cols[1].trim().toUpperCase() : '';
+    if (nameRaw === 'TEAM') return parseFundingRow(cols);
+  }
+  return null;
+}
+if (typeof parseFundingCSV === 'function') parseFundingCSV = fundingRowsFromCsv;
+if (typeof parseFundingTeamCSV === 'function') parseFundingTeamCSV = fundingTeamFromCsv;
+function syncCloserSourceConfig() {
+  if (typeof DASHBOARD_CONFIG === 'undefined' || typeof HISTORY_DATA === 'undefined') return;
+  var apr = HISTORY_DATA['Apr 2026'] && HISTORY_DATA['Apr 2026'].team;
+  if (apr && apr.frontendRev !== undefined) {
+    Object.assign(DASHBOARD_CONFIG, {
+      lastMonthRev: 197764.40,
+      lastMonthLabel: 'April 2026'
+    });
+    DASHBOARD_CONFIG.lastMonthRev = apr.frontendRev;
+  }
+}
+syncCloserSourceConfig();
+if (typeof renderStats === 'function') {
+  var originalRenderStats = renderStats;
+  renderStats = function() {
+    syncCloserSourceConfig();
+    return originalRenderStats.apply(this, arguments);
+  };
+}
+function syncFundingSourceConfig() {
+  if (typeof FUNDING_CONFIG === 'undefined' || typeof FUNDING_HISTORY_DATA === 'undefined') return;
+  var feb = FUNDING_HISTORY_DATA['Feb 2026'] && FUNDING_HISTORY_DATA['Feb 2026'].team;
+  var mar = FUNDING_HISTORY_DATA['Mar 2026'] && FUNDING_HISTORY_DATA['Mar 2026'].team;
+  var apr = FUNDING_HISTORY_DATA['Apr 2026'] && FUNDING_HISTORY_DATA['Apr 2026'].team;
+  if (apr && apr.cashCollected !== undefined) {
+    Object.assign(FUNDING_CONFIG, {
+      lastMonthRev: 120399.50,
+      lastMonthLabel: 'April 2026'
+    });
+    FUNDING_CONFIG.lastMonthRev = apr.cashCollected;
+  }
+  if (feb && mar && apr) {
+    FUNDING_CONFIG.sparklines = Object.assign({}, FUNDING_CONFIG.sparklines, {
+      revenue: [feb.cashCollected, mar.cashCollected, apr.cashCollected],
+      cashCollected: [78502.50, 104807.50, 120399.50],
+      invoiceGenerated: [feb.invoiceGenerated, mar.invoiceGenerated, apr.invoiceGenerated],
+      bizFundingAmount: [feb.approvedBizFundingAmount, mar.approvedBizFundingAmount, apr.approvedBizFundingAmount],
+      avgKPI: [feb.kpiScore, mar.kpiScore, apr.kpiScore]
+    });
+  }
+}
+syncFundingSourceConfig();
+if (typeof renderFundingStats === 'function') {
+  var originalRenderFundingStats = renderFundingStats;
+  renderFundingStats = function() {
+    syncFundingSourceConfig();
+    return originalRenderFundingStats.apply(this, arguments);
+  };
+}
+
+function getSetterColumnLayout(header) {
+  function find(pattern, fallback) {
+    for (var i = 0; i < header.length; i++) {
+      if (pattern.test(String(header[i] || '').toUpperCase())) return i;
+    }
+    return fallback;
+  }
+  return {
+    name: find(/^NAME$/, 1),
+    liveCalls: find(/LIVE CALLS/, 2),
+    totalDials: find(/TOTAL DIALS/, 3),
+    dialPerDay: find(/DIAL PER DAY/, 4),
+    apptsBooked: find(/APPTS BOOKED/, 5),
+    cancelled: find(/^CANCELLED$/, 6),
+    noShows: find(/NO-?SHOW$/, 7),
+    cancelledRate: find(/CANCELLED RATE/, 8),
+    noShowRate: find(/NO-?SHOW RATE/, 9),
+    pickUpRate: find(/PICKUP RATE|PICK UP RATE/, 10),
+    bookingRate: find(/BOOKING RATE/, 11),
+    frontendRev: find(/FRONTEND REV/, 12),
+    backendRev: find(/BACKEND REV/, 13),
+    totalRev: find(/TOTAL REV/, 14),
+    daysLoggedIn: find(/DAYS LOGGED IN/, 15),
+    scrinHrs: find(/SCRIN HRS/, 16),
+    scrinProductivity: find(/SCRIN PRODUCTIVITY/, 17),
+    icCloses: find(/IC CLOSES/, 18),
+    lgfProCloses: find(/LGF PRO CLOSES/, 19),
+    sevenFig: find(/7-FIG/, 20),
+    kpiScore: find(/KPI SCORE/, 21)
+  };
+}
+function setterLayoutFromCsv(csv) {
+  var lines = String(csv || '').trim().split(/\r?\n/);
+  for (var i = 0; i < lines.length; i++) {
+    var cols = csvLine(lines[i]);
+    if (cols.some(function(c){ return /LIVE CALLS/i.test(String(c || '')); })) {
+      return { lines: lines, headerIndex: i, layout: getSetterColumnLayout(cols) };
+    }
+  }
+  return { lines: lines, headerIndex: 0, layout: getSetterColumnLayout([]) };
+}
+function buildSetterRowFromCols(cols, layout) {
+  return {
+    name: String(cols[layout.name] || '').trim().toUpperCase(),
+    liveCalls: num(cols[layout.liveCalls]),
+    totalDials: num(cols[layout.totalDials]),
+    dialPerDay: num(cols[layout.dialPerDay]),
+    apptsBooked: num(cols[layout.apptsBooked]),
+    cancelled: num(cols[layout.cancelled]),
+    noShows: num(cols[layout.noShows]),
+    cancelledRate: pct(cols[layout.cancelledRate]),
+    noShowRate: pct(cols[layout.noShowRate]),
+    pickUpRate: pct(cols[layout.pickUpRate]),
+    bookingRate: pct(cols[layout.bookingRate]),
+    frontendRev: mon(cols[layout.frontendRev]),
+    backendRev: mon(cols[layout.backendRev]),
+    totalRev: mon(cols[layout.totalRev]),
+    daysLoggedIn: num(cols[layout.daysLoggedIn]),
+    scrinHrs: num(cols[layout.scrinHrs]),
+    scrinProductivity: pct(cols[layout.scrinProductivity]),
+    icCloses: num(cols[layout.icCloses]),
+    lgfProCloses: num(cols[layout.lgfProCloses]),
+    sevenFig: cols[layout.sevenFig] ? num(cols[layout.sevenFig]) : null,
+    kpiScore: pct(cols[layout.kpiScore])
+  };
+}
+function parseSetterRowsFromCsv(csv) {
+  var parsed = setterLayoutFromCsv(csv);
+  var rows = [];
+  for (var i = parsed.headerIndex + 1; i < parsed.lines.length; i++) {
+    var cols = csvLine(parsed.lines[i]);
+    var nameRaw = cols[parsed.layout.name] ? cols[parsed.layout.name].trim().toUpperCase() : '';
+    if (!nameRaw || nameRaw === 'GOAL' || nameRaw === 'WEIGHTED AVE') continue;
+    if (nameRaw === 'TEAM') break;
+    var rank = cols[0] ? cols[0].trim() : '';
+    if (!rank || isNaN(parseInt(rank, 10))) continue;
+    rows.push(buildSetterRowFromCols(cols, parsed.layout));
+  }
+  return rows;
+}
+function parseSetterTeamFromCsv(csv) {
+  var parsed = setterLayoutFromCsv(csv);
+  for (var i = parsed.headerIndex + 1; i < parsed.lines.length; i++) {
+    var cols = csvLine(parsed.lines[i]);
+    var nameRaw = cols[parsed.layout.name] ? cols[parsed.layout.name].trim().toUpperCase() : '';
+    if (nameRaw === 'TEAM') return buildSetterRowFromCols(cols, parsed.layout);
+  }
+  return null;
+}
+if (typeof parseSetterCSV === 'function') parseSetterCSV = parseSetterRowsFromCsv;
+if (typeof parseSetterTeamCSV === 'function') parseSetterTeamCSV = parseSetterTeamFromCsv;
+
+function setterSummaryMetrics(rows, team) {
+  rows = Array.isArray(rows) ? rows.filter(function(row) { return row && row.name !== 'TEAM'; }) : [];
+  var count = rows.length || 1;
+  function sum(key) {
+    return rows.reduce(function(total, row) {
+      return total + (Number(row[key]) || 0);
+    }, 0);
+  }
+  function teamVal(key) {
+    return team && team[key] !== undefined ? Number(team[key]) || 0 : 0;
+  }
+  return {
+    count: count,
+    avgFrontendRev: rows.length ? sum('frontendRev') / count : teamVal('frontendRev'),
+    avgDialPerDay: rows.length ? sum('dialPerDay') / count : teamVal('dialPerDay'),
+    avgBookedPerSetter: rows.length ? sum('apptsBooked') / count : teamVal('apptsBooked'),
+    avgKPI: rows.length ? sum('kpiScore') / count : teamVal('kpiScore')
+  };
+}
+function setterCardNumber(value, decimals) {
+  var num = Number(value);
+  if (!isFinite(num)) num = 0;
+  return num.toFixed(decimals).replace(/\.0+$/, '').replace(/(\.\d*[1-9])0+$/, '$1');
+}
+if (typeof renderSetterStats === 'function') {
+  renderSetterStats = function() {
+    var sorted = settersData.slice().sort(function(a,b){ return (b.kpiScore || 0) - (a.kpiScore || 0); });
+    var metrics = setterSummaryMetrics(sorted, null);
+    var bar = document.getElementById('setterStatsBar');
+    if (!bar) return;
+    var sparklines = (typeof SETTERS_CONFIG !== 'undefined' && SETTERS_CONFIG.sparklines) ? SETTERS_CONFIG.sparklines : {};
+    bar.innerHTML =
+      mkStatWithRingAndSparkline('Team Avg Front End Rev', fmtMoney(metrics.avgFrontendRev), 'goal: $' + Math.round(SETTER_GOALS.frontendRev/1000) + 'k', SETTER_GOALS.frontendRev, true, sparklines.revenue) +
+      mkStatWithRingAndSparkline('Avg Dial / Day', setterCardNumber(metrics.avgDialPerDay, 1), 'goal: ' + SETTER_GOALS.dialPerDay, SETTER_GOALS.dialPerDay, false, sparklines.dials) +
+      mkStatWithRingAndSparkline('Avg Booked / Setter', setterCardNumber(metrics.avgBookedPerSetter, 1), 'goal: ' + SETTER_GOALS.apptsBooked, SETTER_GOALS.apptsBooked, false, sparklines.booked) +
+      mkStatWithRingAndSparkline('Avg KPI Score', metrics.avgKPI.toFixed(2) + '%', 'team average', 75, false, sparklines.avgKPI) +
+      mkSetterDeptHead();
+  };
+}
+if (typeof updateSetterHistorySummary === 'function') {
+  updateSetterHistorySummary = function(month) {
+    var hist = SETTER_HISTORY_DATA[month];
+    if (!hist) return;
+    var metrics = setterSummaryMetrics(hist.setters || [], hist.team);
+    var avgRev = document.getElementById('setterHistoryAvgRev');
+    var avgDial = document.getElementById('setterHistoryAvgDial');
+    var avgBooked = document.getElementById('setterHistoryAvgBooked');
+    var avgKPI = document.getElementById('setterHistoryKPI');
+    if (avgRev) avgRev.textContent = fmtMoney(metrics.avgFrontendRev);
+    if (avgDial) avgDial.textContent = setterCardNumber(metrics.avgDialPerDay, 1);
+    if (avgBooked) avgBooked.textContent = setterCardNumber(metrics.avgBookedPerSetter, 1);
+    if (avgKPI) avgKPI.textContent = metrics.avgKPI.toFixed(2) + '%';
+  };
+}
+
+if (typeof SETTER_GOALS !== 'undefined') {
+  Object.assign(SETTER_GOALS, {
+    liveCalls:250, totalDials:1600, dialPerDay:100, apptsBooked:180,
+    cancelledRate:20, noShowRate:20, pickUpRate:15, bookingRate:75,
+    frontendRev:20000, daysLoggedIn:22, scrinHrs:160, scrinProductivity:60,
+    icCloses:10, lgfProCloses:5
+  });
+}
+if (typeof SETTER_WEIGHTS !== 'undefined') {
+  Object.assign(SETTER_WEIGHTS, {
+    liveCalls:0.08, totalDials:0.08, dialPerDay:0.08, apptsBooked:0.10,
+    cancelledRate:0.05, noShowRate:0.05, pickUpRate:0.05, bookingRate:0.10,
+    frontendRev:0.20, scrinHrs:0.05, scrinProductivity:0.06,
+    icCloses:0.05, lgfProCloses:0.05
+  });
+}
+function setterRatioFor(metric, s, g) {
+  if (metric === 'cancelledRate' || metric === 'noShowRate') return lowGoalRatio(s[metric], g[metric]);
+  return goalRatio(s[metric], g[metric]);
+}
+if (typeof calculateSetterKPI === 'function') {
+  calculateSetterKPI = function(s) {
+    var g = SETTER_GOALS;
+    var w = SETTER_WEIGHTS;
+    var keys = ['liveCalls','totalDials','dialPerDay','apptsBooked','cancelledRate','noShowRate','pickUpRate','bookingRate','frontendRev','scrinHrs','scrinProductivity','icCloses','lgfProCloses'];
+    var raw = 0;
+    var breakdown = {};
+    keys.forEach(function(key) {
+      var achieved = setterRatioFor(key, s, g);
+      raw += achieved * (w[key] || 0);
+      breakdown[key] = { actual:s[key] || 0, goal:g[key] || 0, achieved:achieved, weight:w[key] || 0 };
+    });
+    return { score: raw * 100, breakdown: breakdown };
+  };
+}
+if (typeof buildSetterKPITooltip === 'function') {
+  buildSetterKPITooltip = function(name, bd, totalScore) {
+    var metrics = [
+      { k:'liveCalls', label:'Live Calls', fmt:function(b){ return b.actual+' vs '+b.goal; } },
+      { k:'totalDials', label:'Total Dials', fmt:function(b){ return b.actual+' vs '+b.goal; } },
+      { k:'dialPerDay', label:'Dial/Day', fmt:function(b){ return b.actual+' vs '+b.goal; } },
+      { k:'apptsBooked', label:'Appts Booked', fmt:function(b){ return b.actual+' vs '+b.goal; } },
+      { k:'cancelledRate', label:'Cancelled Rate', fmt:function(b){ return percent(b.actual)+' vs <'+percent(b.goal); } },
+      { k:'noShowRate', label:'No-Show Rate', fmt:function(b){ return percent(b.actual)+' vs <'+percent(b.goal); } },
+      { k:'pickUpRate', label:'Pick Up Rate', fmt:function(b){ return percent(b.actual)+' vs >='+percent(b.goal); } },
+      { k:'bookingRate', label:'Booking Rate', fmt:function(b){ return percent(b.actual)+' vs >='+percent(b.goal); } },
+      { k:'frontendRev', label:'Frontend Rev', fmt:function(b){ return money(b.actual)+' vs >='+money(b.goal); } },
+      { k:'scrinHrs', label:'Scrin Hrs', fmt:function(b){ return b.actual+' vs '+b.goal; } },
+      { k:'scrinProductivity', label:'Scrin Productivity', fmt:function(b){ return percent(b.actual)+' vs >='+percent(b.goal); } },
+      { k:'icCloses', label:'IC Closes', fmt:function(b){ return b.actual+' vs '+b.goal; } },
+      { k:'lgfProCloses', label:'LGF PRO', fmt:function(b){ return b.actual+' vs '+b.goal; } }
+    ];
+    var rows = '';
+    metrics.forEach(function(m) {
+      var b = bd[m.k];
+      if (!b) return;
+      var achievedPct = Math.round(b.achieved * 100);
+      var barCol = achievedPct >= 100 ? 'var(--green-bright)' : achievedPct >= 70 ? 'var(--gold)' : 'var(--red)';
+      var wLabel = (b.weight * 100).toFixed(0) + '%';
+      var contrib = (b.achieved * b.weight * 100).toFixed(1);
+      rows += '<div class="kpi-tt-row"><span class="kpi-tt-label">' + m.label + ' <span style="color:#444">(' + wLabel + ')</span></span><span class="kpi-tt-val" style="color:' + barCol + '">' + contrib + 'pts</span></div>' +
+        '<div class="kpi-tt-detail"><span>' + m.fmt(b) + '</span><div class="kpi-tt-bar"><div class="kpi-tt-bar-fill" style="width:' + Math.min(achievedPct,100) + '%;background:' + barCol + '"></div></div><span style="color:var(--text-muted)">' + achievedPct + '%</span></div>';
+    });
+    var scoreCls = totalScore >= 90 ? 'c-green' : totalScore >= 70 ? 'c-gold' : 'c-red';
+    return '<div class="kpi-tooltip"><div class="kpi-tt-title">KPI Breakdown - ' + name + ' <span class="kpi-tt-badge">WEIGHTED</span></div>' + rows +
+      '<div class="kpi-tt-total"><span style="color:var(--text-muted)">Final Score</span><span class="' + scoreCls + '">' + totalScore.toFixed(2) + '%</span></div>' +
+      '<div class="kpi-tt-formula">Score = sum(min(actual / goal, 1) x weight) x 100</div></div>';
+  };
+}
+
+var CSM2_CONFIG = {
+  sheetName: 'CSM T2',
+  departmentName: 'CSM T2 Department',
+  deptHead: { name:'JEAN VALENCIA', title:'CSM T2 DEPT HEAD', photoKey:'JEAN' },
+  sheetBaseUrl: (typeof DASHBOARD_CONFIG !== 'undefined' ? DASHBOARD_CONFIG.sheetBaseUrl : ''),
+  currentMonthGid: '1690228347',
+  goals: {
+    showRate:75,
+    cancellationRate:10,
+    noShowRate:15,
+    approvedPersonalLoansAmount:70000,
+    approvedPloanCount:2,
+    endorsedFiles:24,
+    endorsementRate:20,
+    handledEndorsementVolume:10
+  },
+  weights: {
+    showRate:0.20,
+    cancellationRate:0.10,
+    noShowRate:0.10,
+    approvedPersonalLoansAmount:0.10,
+    approvedPloanCount:0.10,
+    endorsedFiles:0.20,
+    endorsementRate:0.10,
+    handledEndorsementVolume:0.10
+  }
+};
+var CSM2_SHEET_URL = CSM2_CONFIG.sheetBaseUrl + '?gid=' + CSM2_CONFIG.currentMonthGid + '&single=true&output=csv';
+var CSM2_FALLBACK_CSV = [
+  '"","WEIGHTED AVE","20%","10%","10%","","10%","10%","-","","20%","10%","10%","",""',
+  '"1","MARSI","79.07%","4.65%","16.28%","4","$110,000.00","3","75.00%","35","9","25.71%","4","66.85%",""',
+  '"2","ABBY","93.18%","0.00%","6.82%","0","$0.00","0","0.00%","44","1","2.27%","0","37.42%",""',
+  '"3","MARVIN","78.57%","3.57%","17.86%","0","$0.00","0","0.00%","56","5","8.93%","0","35.06%",""',
+  '"","TEAM","83.61%","2.74%","13.65%","133.33%","$110,000.00","100.00%","75.00%","135","15","36.92%","4","46.44%",""'
+].join('\n');
+var csm2Data = [];
+var csm2TeamData = null;
+var csm2DataLoaded = false;
+var csm2IsFirstLoad = true;
+var CSM2_HISTORY_DATA = {};
+function buildCsm2Row(cols) {
+  return {
+    name: String(cols[1] || '').trim().toUpperCase(),
+    showRate: pct(cols[2]),
+    cancellationRate: pct(cols[3]),
+    noShowRate: pct(cols[4]),
+    personalLoansScheduled: num(cols[5]),
+    personalLoansScheduledDisplay: String(cols[5] || '').trim(),
+    approvedPersonalLoansAmount: mon(cols[6]),
+    approvedPloanCount: num(cols[7]),
+    approvedPloanCountDisplay: String(cols[7] || '').trim(),
+    ploanApprovalRate: pct(cols[8]),
+    meetings: num(cols[9]),
+    endorsedFiles: num(cols[10]),
+    endorsementRate: pct(cols[11]),
+    handledEndorsementVolume: num(cols[12]),
+    kpiScore: pct(cols[13])
+  };
+}
+function parseCsm2CSV(csv) {
+  var lines = String(csv || '').trim().split(/\r?\n/);
+  var rows = [];
+  for (var i = 0; i < lines.length; i++) {
+    var cols = csvLine(lines[i]);
+    var rank = cols[0] ? cols[0].trim() : '';
+    var name = cols[1] ? cols[1].trim().toUpperCase() : '';
+    if (!rank || isNaN(parseInt(rank, 10)) || !name || name === 'TEAM') continue;
+    var row = buildCsm2Row(cols);
+    if (!(row.kpiScore > 0)) row.kpiScore = calculateCsm2KPI(row).score;
+    rows.push(row);
+  }
+  return rows;
+}
+function parseCsm2TeamCSV(csv) {
+  var lines = String(csv || '').trim().split(/\r?\n/);
+  for (var i = 0; i < lines.length; i++) {
+    var cols = csvLine(lines[i]);
+    var name = cols[1] ? cols[1].trim().toUpperCase() : '';
+    if (name === 'TEAM') {
+      var team = buildCsm2Row(cols);
+      team.name = 'TEAM';
+      if (!(team.kpiScore > 0)) team.kpiScore = calculateCsm2KPI(team).score;
+      return team;
+    }
+  }
+  return null;
+}
+function buildCsm2Team(rows) {
+  var count = rows.length || 1;
+  var team = { name:'TEAM', showRate:0, cancellationRate:0, noShowRate:0, personalLoansScheduled:0, approvedPersonalLoansAmount:0, approvedPloanCount:0, ploanApprovalRate:0, meetings:0, endorsedFiles:0, endorsementRate:0, handledEndorsementVolume:0, kpiScore:0 };
+  rows.forEach(function(r) {
+    team.showRate += r.showRate; team.cancellationRate += r.cancellationRate; team.noShowRate += r.noShowRate;
+    team.personalLoansScheduled += r.personalLoansScheduled; team.approvedPersonalLoansAmount += r.approvedPersonalLoansAmount; team.approvedPloanCount += r.approvedPloanCount;
+    team.ploanApprovalRate += r.ploanApprovalRate; team.meetings += r.meetings; team.endorsedFiles += r.endorsedFiles; team.endorsementRate += r.endorsementRate;
+    team.handledEndorsementVolume += r.handledEndorsementVolume; team.kpiScore += r.kpiScore;
+  });
+  team.showRate /= count; team.cancellationRate /= count; team.noShowRate /= count; team.ploanApprovalRate /= count; team.endorsementRate /= count; team.kpiScore /= count;
+  return team;
+}
+function calculateCsm2KPI(row) {
+  var g = CSM2_CONFIG.goals;
+  var w = CSM2_CONFIG.weights;
+  var breakdown = {
+    showRate: { actual:row.showRate, goal:g.showRate, achieved:goalRatio(row.showRate, g.showRate), weight:w.showRate },
+    cancellationRate: { actual:row.cancellationRate, goal:g.cancellationRate, achieved:lowGoalRatio(row.cancellationRate, g.cancellationRate), weight:w.cancellationRate },
+    noShowRate: { actual:row.noShowRate, goal:g.noShowRate, achieved:lowGoalRatio(row.noShowRate, g.noShowRate), weight:w.noShowRate },
+    approvedPersonalLoansAmount: { actual:row.approvedPersonalLoansAmount, goal:g.approvedPersonalLoansAmount, achieved:goalRatio(row.approvedPersonalLoansAmount, g.approvedPersonalLoansAmount), weight:w.approvedPersonalLoansAmount },
+    approvedPloanCount: { actual:row.approvedPloanCount, goal:g.approvedPloanCount, achieved:goalRatio(row.approvedPloanCount, g.approvedPloanCount), weight:w.approvedPloanCount },
+    endorsedFiles: { actual:row.endorsedFiles, goal:g.endorsedFiles, achieved:goalRatio(row.endorsedFiles, g.endorsedFiles), weight:w.endorsedFiles },
+    endorsementRate: { actual:row.endorsementRate, goal:g.endorsementRate, achieved:goalRatio(row.endorsementRate, g.endorsementRate), weight:w.endorsementRate },
+    handledEndorsementVolume: { actual:row.handledEndorsementVolume, goal:g.handledEndorsementVolume, achieved:goalRatio(row.handledEndorsementVolume, g.handledEndorsementVolume), weight:w.handledEndorsementVolume }
+  };
+  var raw = 0;
+  Object.keys(breakdown).forEach(function(key){ raw += breakdown[key].achieved * breakdown[key].weight; });
+  return { score: raw * 100, breakdown: breakdown };
+}
+function csm2Tooltip(row) {
+  var bd = calculateCsm2KPI(row).breakdown;
+  var defs = [
+    { k:'showRate', label:'Show Rate', fmt:function(b){ return percent(b.actual)+' vs >='+percent(b.goal); } },
+    { k:'cancellationRate', label:'Cancellation Rate', fmt:function(b){ return percent(b.actual)+' vs <='+percent(b.goal); } },
+    { k:'noShowRate', label:'No Show Rate', fmt:function(b){ return percent(b.actual)+' vs <='+percent(b.goal); } },
+    { k:'approvedPersonalLoansAmount', label:'Approved P-Loans', fmt:function(b){ return money(b.actual)+' vs >='+money(b.goal); } },
+    { k:'approvedPloanCount', label:'# Approved P-Loan', fmt:function(b){ return b.actual+' vs '+b.goal; } },
+    { k:'endorsedFiles', label:'Endorsed Files', fmt:function(b){ return b.actual+' vs '+b.goal; } },
+    { k:'endorsementRate', label:'Endorsement Rate', fmt:function(b){ return percent(b.actual)+' vs >='+percent(b.goal); } },
+    { k:'handledEndorsementVolume', label:'Handled Volume', fmt:function(b){ return b.actual+' vs '+b.goal; } }
+  ];
+  var rows = '';
+  defs.forEach(function(def) {
+    var b = bd[def.k];
+    var achievedPct = Math.round(b.achieved * 100);
+    var barCol = achievedPct >= 100 ? 'var(--green-bright)' : achievedPct >= 70 ? 'var(--gold)' : 'var(--red)';
+    rows += '<div class="kpi-tt-row"><span class="kpi-tt-label">'+def.label+' <span style="color:#444">('+(b.weight*100).toFixed(0)+'%)</span></span><span class="kpi-tt-val" style="color:'+barCol+'">'+(b.achieved*b.weight*100).toFixed(1)+'pts</span></div>' +
+      '<div class="kpi-tt-detail"><span>'+def.fmt(b)+'</span><div class="kpi-tt-bar"><div class="kpi-tt-bar-fill" style="width:'+Math.min(achievedPct,100)+'%;background:'+barCol+'"></div></div><span style="color:var(--text-muted)">'+achievedPct+'%</span></div>';
+  });
+  var scoreCls = row.kpiScore >= 90 ? 'c-green' : row.kpiScore >= 70 ? 'c-gold' : 'c-red';
+  return '<div class="kpi-tooltip"><div class="kpi-tt-title">KPI Breakdown - '+row.name+' <span class="kpi-tt-badge">WEIGHTED</span></div>'+rows+'<div class="kpi-tt-total"><span style="color:var(--text-muted)">Sheet Score</span><span class="'+scoreCls+'">'+(row.kpiScore || 0).toFixed(2)+'%</span></div></div>';
+}
+function csm2CellDisplay(raw, numeric) {
+  return raw && String(raw).indexOf('%') !== -1 ? raw : Math.round(numeric || 0).toLocaleString('en-US');
+}
+function csm2RowCells(row, rank, historyMode) {
+  var badgeCls = rank===1?'rank-badge-1':rank===2?'rank-badge-2':rank===3?'rank-badge-3':'rank-badge-default';
+  var nameCls = rank===1?'closer-name closer-name-rank1':'closer-name';
+  return '<td><div class="rank-badge '+badgeCls+'">'+rank+'</div></td>' +
+    '<td><div class="avatar-cell">'+avatar(row.name, rank, !historyMode)+'<span class="'+nameCls+'">'+row.name+(rank===1?' <span class="crown">&#128081;</span>':'')+'</span></div></td>' +
+    '<td class="'+valueClass(row.showRate, CSM2_CONFIG.goals.showRate)+'">'+percent(row.showRate)+'</td>' +
+    '<td class="'+lowerValueClass(row.cancellationRate, CSM2_CONFIG.goals.cancellationRate)+'">'+percent(row.cancellationRate)+'</td>' +
+    '<td class="'+lowerValueClass(row.noShowRate, CSM2_CONFIG.goals.noShowRate)+'">'+percent(row.noShowRate)+'</td>' +
+    '<td class="c-white">'+csm2CellDisplay(row.personalLoansScheduledDisplay, row.personalLoansScheduled)+'</td>' +
+    '<td class="'+valueClass(row.approvedPersonalLoansAmount, CSM2_CONFIG.goals.approvedPersonalLoansAmount)+'">'+money(row.approvedPersonalLoansAmount)+'</td>' +
+    '<td class="'+valueClass(row.approvedPloanCount, CSM2_CONFIG.goals.approvedPloanCount)+'">'+csm2CellDisplay(row.approvedPloanCountDisplay, row.approvedPloanCount)+'</td>' +
+    '<td class="c-white">'+percent(row.ploanApprovalRate)+'</td>' +
+    '<td class="c-white">'+Math.round(row.meetings || 0)+'</td>' +
+    '<td class="'+valueClass(row.endorsedFiles, CSM2_CONFIG.goals.endorsedFiles)+'">'+Math.round(row.endorsedFiles || 0)+'</td>' +
+    '<td class="'+valueClass(row.endorsementRate, CSM2_CONFIG.goals.endorsementRate)+'">'+percent(row.endorsementRate)+'</td>' +
+    '<td class="'+valueClass(row.handledEndorsementVolume, CSM2_CONFIG.goals.handledEndorsementVolume)+'">'+Math.round(row.handledEndorsementVolume || 0)+'</td>' +
+    '<td class="kpi-cell">'+kpiBar(row.kpiScore)+csm2Tooltip(row)+'</td>';
+}
+function csm2TeamCells(team) {
+  return '<td></td><td>TEAM</td>' +
+    '<td class="'+valueClass(team.showRate, CSM2_CONFIG.goals.showRate)+'">'+percent(team.showRate)+'</td>' +
+    '<td class="'+lowerValueClass(team.cancellationRate, CSM2_CONFIG.goals.cancellationRate)+'">'+percent(team.cancellationRate)+'</td>' +
+    '<td class="'+lowerValueClass(team.noShowRate, CSM2_CONFIG.goals.noShowRate)+'">'+percent(team.noShowRate)+'</td>' +
+    '<td class="c-white">'+csm2CellDisplay(team.personalLoansScheduledDisplay, team.personalLoansScheduled)+'</td>' +
+    '<td class="'+valueClass(team.approvedPersonalLoansAmount, CSM2_CONFIG.goals.approvedPersonalLoansAmount)+'">'+money(team.approvedPersonalLoansAmount)+'</td>' +
+    '<td class="'+valueClass(team.approvedPloanCount, CSM2_CONFIG.goals.approvedPloanCount)+'">'+csm2CellDisplay(team.approvedPloanCountDisplay, team.approvedPloanCount)+'</td>' +
+    '<td class="c-white">'+percent(team.ploanApprovalRate)+'</td>' +
+    '<td class="c-white">'+Math.round(team.meetings || 0)+'</td>' +
+    '<td class="'+valueClass(team.endorsedFiles, CSM2_CONFIG.goals.endorsedFiles)+'">'+Math.round(team.endorsedFiles || 0)+'</td>' +
+    '<td class="'+valueClass(team.endorsementRate, CSM2_CONFIG.goals.endorsementRate)+'">'+percent(team.endorsementRate)+'</td>' +
+    '<td class="'+valueClass(team.handledEndorsementVolume, CSM2_CONFIG.goals.handledEndorsementVolume)+'">'+Math.round(team.handledEndorsementVolume || 0)+'</td>' +
+    '<td class="kpi-cell"><span class="kpi-pill '+rankClass(team.kpiScore)+'">'+(team.kpiScore || 0).toFixed(2)+'%</span>'+csm2Tooltip(Object.assign({ name:'TEAM' }, team))+'</td>';
+}
+function renderCsm2Stats() {
+  var team = csm2TeamData || buildCsm2Team(csm2Data);
+  var dh = CSM2_CONFIG.deptHead;
+  var photo = typeof getTeamPhoto === 'function' ? getTeamPhoto(dh.photoKey) : '';
+  var initials = dh.name.split(' ').map(function(w){ return w[0]; }).join('');
+  var dhCard = '<div class="stat-card stat-card-head"><div class="dept-head-wrap"><div class="stat-label">DEPT HEAD</div><div class="dept-head-row"><div class="dept-head-avatar-wrap">'+(photo ? '<img class="dept-head-photo" src="'+photo+'" alt="'+dh.name+'">' : '<div class="dept-head-photo dept-head-placeholder">'+initials+'</div>')+'</div><div class="dept-head-info"><div class="stat-value">'+dh.name+'</div><div class="dept-head-title">'+dh.title+'</div></div></div></div></div>';
+  var bar = document.getElementById('csm2StatsBar');
+  if (!bar) return;
+  bar.innerHTML = dhCard +
+    stat('Team Show Rate', percent(team.showRate), 'Goal >= 75%', 'highlight') +
+    stat('Cancellation Rate', percent(team.cancellationRate), 'Goal <= 10%') +
+    stat('No Show Rate', percent(team.noShowRate), 'Goal <= 15%') +
+    stat('Approved P-Loans', money(team.approvedPersonalLoansAmount), 'Goal >= $70K') +
+    stat('Endorsed Files', Math.round(team.endorsedFiles || 0), 'Goal >= 24') +
+    stat('Avg KPI Score', (team.kpiScore || 0).toFixed(1) + '%', 'Weighted score');
+}
+function renderCsm2Table() {
+  var tbody = document.getElementById('csm2TableBody');
+  if (!tbody) return;
+  var goalRow = tbody.querySelector('.goal-row');
+  var weightRow = tbody.querySelector('.weight-row');
+  tbody.innerHTML = '';
+  if (goalRow) tbody.appendChild(goalRow);
+  if (weightRow) tbody.appendChild(weightRow);
+  var sorted = csm2Data.slice().sort(function(a,b){ return (b.kpiScore || 0) - (a.kpiScore || 0); });
+  var select = document.getElementById('csm2CalcName');
+  if (select) {
+    select.innerHTML = '<option value="">Select CSM T2 member...</option>';
+    sorted.forEach(function(r){ var opt = document.createElement('option'); opt.value = r.name; opt.textContent = r.name; select.appendChild(opt); });
+  }
+  sorted.forEach(function(row, i) {
+    var rank = i + 1;
+    var tr = document.createElement('tr');
+    tr.className = 'data-row' + (rank===1?' data-row-rank1':rank===2?' data-row-rank2':rank===3?' data-row-rank3':'');
+    tr.innerHTML = csm2RowCells(row, rank, false);
+    tbody.appendChild(tr);
+  });
+  var teamTr = document.createElement('tr');
+  teamTr.className = 'team-row';
+  teamTr.innerHTML = csm2TeamCells(csm2TeamData || buildCsm2Team(sorted));
+  tbody.appendChild(teamTr);
+}
+function renderCsm2MobileCards() {
+  var wrap = document.getElementById('csm2MobileCardsContainer');
+  if (!wrap) return;
+  var sorted = csm2Data.slice().sort(function(a,b){ return (b.kpiScore || 0) - (a.kpiScore || 0); });
+  wrap.innerHTML = sorted.map(function(row, i) {
+    var rank = i + 1;
+    return '<div class="mobile-card '+(rank===1?'rank-1':'')+'"><div class="mobile-card-header"><div class="mobile-card-rank rank-'+rank+'">'+rank+'</div><div class="mobile-card-avatar">'+avatar(row.name, rank, false)+'</div><div class="mobile-card-name">'+row.name+'</div></div>' +
+      '<div class="mobile-card-kpi"><div class="mobile-card-kpi-bar"><div class="mobile-card-kpi-fill" style="width:'+Math.min(row.kpiScore || 0,100)+'%"></div></div><div class="mobile-card-kpi-text">'+(row.kpiScore || 0).toFixed(1)+'%</div></div>' +
+      '<div class="mobile-card-stats"><div class="mobile-card-stat-item"><div class="mobile-card-stat-label">Show Rate</div><div class="mobile-card-stat-value">'+percent(row.showRate)+'</div></div><div class="mobile-card-stat-item"><div class="mobile-card-stat-label">No Show</div><div class="mobile-card-stat-value">'+percent(row.noShowRate)+'</div></div><div class="mobile-card-stat-item"><div class="mobile-card-stat-label">Approved P-Loans</div><div class="mobile-card-stat-value">'+money(row.approvedPersonalLoansAmount)+'</div></div><div class="mobile-card-stat-item"><div class="mobile-card-stat-label">Endorsed</div><div class="mobile-card-stat-value">'+Math.round(row.endorsedFiles || 0)+'</div></div></div></div>';
+  }).join('');
+}
+function updateCsm2HistoryData() {
+  CSM2_HISTORY_DATA.Current = {
+    month:'Current',
+    csms:csm2Data.slice(),
+    team:csm2TeamData || buildCsm2Team(csm2Data)
+  };
+}
+function showCsm2History(month) {
+  var hist = CSM2_HISTORY_DATA[month] || CSM2_HISTORY_DATA.Current;
+  if (!hist) return;
+  document.querySelectorAll('.csm2-month-pill').forEach(function(p){ p.classList.remove('active'); });
+  var pill = document.querySelector('[data-csm2-month="' + (month || 'Current') + '"]');
+  if (pill) pill.classList.add('active');
+  setText('csm2HistoryShowRate', percent(hist.team.showRate));
+  setText('csm2HistoryEndorsed', Math.round(hist.team.endorsedFiles || 0).toLocaleString('en-US'));
+  setText('csm2HistoryApproved', money(hist.team.approvedPersonalLoansAmount));
+  setText('csm2HistoryKPI', (hist.team.kpiScore || 0).toFixed(1) + '%');
+  var tbody = document.getElementById('csm2HistoryTableBody');
+  if (!tbody) return;
+  var goalRow = tbody.querySelector('.goal-row');
+  var weightRow = tbody.querySelector('.weight-row');
+  tbody.innerHTML = '';
+  if (goalRow) tbody.appendChild(goalRow);
+  if (weightRow) tbody.appendChild(weightRow);
+  hist.csms.slice().sort(function(a,b){ return (b.kpiScore || 0) - (a.kpiScore || 0); }).forEach(function(row, i) {
+    var tr = document.createElement('tr');
+    var rank = i + 1;
+    tr.className = 'data-row' + (rank===1?' data-row-rank1':rank===2?' data-row-rank2':rank===3?' data-row-rank3':'');
+    tr.innerHTML = csm2RowCells(row, rank, true);
+    tbody.appendChild(tr);
+  });
+  var ttr = document.createElement('tr');
+  ttr.className = 'team-row';
+  ttr.innerHTML = csm2TeamCells(hist.team);
+  tbody.appendChild(ttr);
+}
+function updateCsm2Dates() {
+  var now = new Date();
+  var monthNames = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+  setText('csm2HeaderDate', monthNames[now.getMonth()] + ' ' + now.getFullYear());
+  var days = document.getElementById('csm2CalcDaysLeft');
+  if (days) days.value = daysLeftInMonth();
+}
+async function loadCsm2Data() {
+  var srcLogo = document.querySelector('.header .logo-mark img');
+  var logoWrap = document.getElementById('csm2LogoMark');
+  if (srcLogo && logoWrap && !logoWrap.querySelector('img')) logoWrap.appendChild(srcLogo.cloneNode(true));
+  var loading = document.getElementById('csm2LoadingIndicator');
+  var content = document.getElementById('csm2DashboardContent');
+  if (csm2IsFirstLoad && loading && content) { loading.style.display = 'block'; content.style.display = 'none'; }
+  var csv = CSM2_FALLBACK_CSV;
+  try {
+    var response = await fetch(CSM2_SHEET_URL + '&t=' + Date.now());
+    var text = await response.text();
+    var parsed = parseCsm2CSV(text);
+    if (parsed.length) {
+      csv = text;
+      csm2Data = parsed;
+      csm2TeamData = parseCsm2TeamCSV(text) || buildCsm2Team(parsed);
+      setText('csm2LastUpdated', 'Live -- updated ' + new Date().toLocaleTimeString());
+    }
+  } catch(e) {
+    setText('csm2LastUpdated', 'Offline -- using cached CSM T2 data');
+  }
+  if (!csm2Data.length) {
+    csm2Data = parseCsm2CSV(csv);
+    csm2TeamData = parseCsm2TeamCSV(csv) || buildCsm2Team(csm2Data);
+    setText('csm2LastUpdated', 'Cached CSM T2 data');
+  }
+  updateCsm2Dates();
+  updateCsm2HistoryData();
+  renderCsm2Stats();
+  renderCsm2Table();
+  renderCsm2MobileCards();
+  showCsm2History('Current');
+  if (loading && content) { loading.style.display = 'none'; content.style.display = 'block'; }
+  csm2IsFirstLoad = false;
+}
+function switchCsm2Tab(evt, tab) {
+  document.querySelectorAll('#csm2TabNav .tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('#dept-csm-t2 .tab-content').forEach(function(c){ c.classList.remove('active'); });
+  var pane = document.getElementById('tab-csm2-' + tab);
+  if (pane) pane.classList.add('active');
+  if (evt && evt.target) evt.target.classList.add('active');
+}
+function runCsm2Forecast() {
+  var selected = document.getElementById('csm2CalcName').value;
+  if (!selected) { alert('Select a CSM T2 member first.'); return; }
+  var sorted = csm2Data.slice().sort(function(a,b){ return (b.kpiScore || 0) - (a.kpiScore || 0); });
+  var me = sorted.find(function(r){ return r.name === selected; });
+  var targetRank = Math.min(parseInt(document.getElementById('csm2CalcTargetRank').value, 10), sorted.length);
+  var target = sorted[targetRank - 1] || sorted[0];
+  var days = parseInt(document.getElementById('csm2CalcDaysLeft').value, 10) || 0;
+  var gap = Math.max(0, (target.kpiScore || 0) - (me.kpiScore || 0));
+  document.getElementById('csm2ResultGrid').innerHTML =
+    '<div class="result-card"><div class="result-label">KPI Gap</div><div class="result-value">'+gap.toFixed(1)+' pts</div><div class="result-note">to reach rank '+targetRank+'</div></div>' +
+    '<div class="result-card"><div class="result-label">Show Rate Gap</div><div class="result-value">'+Math.max(0, CSM2_CONFIG.goals.showRate - me.showRate).toFixed(1)+'%</div><div class="result-note">goal: 75%+</div></div>' +
+    '<div class="result-card"><div class="result-label">Cancel Over Goal</div><div class="result-value">'+Math.max(0, me.cancellationRate - CSM2_CONFIG.goals.cancellationRate).toFixed(1)+'%</div><div class="result-note">lower is better</div></div>' +
+    '<div class="result-card"><div class="result-label">Approved P-Loan Amt</div><div class="result-value">'+money(Math.max(0, CSM2_CONFIG.goals.approvedPersonalLoansAmount - me.approvedPersonalLoansAmount))+'</div><div class="result-note">needed to goal</div></div>' +
+    '<div class="result-card"><div class="result-label">Endorsed Files Needed</div><div class="result-value">'+Math.ceil(Math.max(0, CSM2_CONFIG.goals.endorsedFiles - me.endorsedFiles))+'</div><div class="result-note">days left: '+days+'</div></div>' +
+    '<div class="result-card"><div class="result-label">Handled Volume Needed</div><div class="result-value">'+Math.ceil(Math.max(0, CSM2_CONFIG.goals.handledEndorsementVolume - me.handledEndorsementVolume))+'</div><div class="result-note">goal: 10+</div></div>';
+  document.getElementById('csm2AiAnalysisBody').innerHTML =
+    '<div class="analysis-section"><div class="analysis-label">Current Position</div><div class="analysis-text">'+me.name+' is at '+(me.kpiScore || 0).toFixed(1)+'% KPI. Rank '+targetRank+' is '+target.name+' at '+(target.kpiScore || 0).toFixed(1)+'%.</div></div>' +
+    '<div class="analysis-section"><div class="analysis-label">Priority Moves</div><div class="analysis-text">Work the weighted gaps first: endorsed files, show rate, cancellation/no-show control, then approved P-loan amount and handled endorsement volume.</div></div>';
+  document.getElementById('csm2AiAnalysis').style.display = 'block';
+}
+function openCsm2LeadershipBrief() {
+  var sorted = csm2Data.slice().sort(function(a,b){ return (b.kpiScore || 0) - (a.kpiScore || 0); });
+  var team = csm2TeamData || buildCsm2Team(sorted);
+  var html = '<div style="padding:20px;background:var(--bg-primary);"><h2 style="margin-top:0;margin-bottom:20px;">CSM T2 Department Brief</h2>' +
+    '<div style="margin-bottom:24px;padding:16px;background:var(--bg-card);border-radius:8px;border-left:3px solid var(--gold);"><div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px;font-weight:600;">Team Summary</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;">' +
+    '<div><div style="color:var(--text-muted);font-size:11px;margin-bottom:4px;">Show Rate</div><div style="font-size:20px;font-weight:700;">'+percent(team.showRate)+'</div></div>' +
+    '<div><div style="color:var(--text-muted);font-size:11px;margin-bottom:4px;">Approved P-Loans</div><div style="font-size:20px;font-weight:700;">'+money(team.approvedPersonalLoansAmount)+'</div></div>' +
+    '<div><div style="color:var(--text-muted);font-size:11px;margin-bottom:4px;">Endorsed Files</div><div style="font-size:20px;font-weight:700;">'+Math.round(team.endorsedFiles || 0)+'</div></div>' +
+    '<div><div style="color:var(--text-muted);font-size:11px;margin-bottom:4px;">Avg KPI</div><div style="font-size:20px;font-weight:700;">'+(team.kpiScore || 0).toFixed(1)+'%</div></div></div></div>';
+  sorted.forEach(function(row, i) {
+    var notes = [];
+    if (row.showRate < CSM2_CONFIG.goals.showRate) notes.push('show rate');
+    if (row.cancellationRate > CSM2_CONFIG.goals.cancellationRate) notes.push('cancellation control');
+    if (row.noShowRate > CSM2_CONFIG.goals.noShowRate) notes.push('no-show control');
+    if (row.endorsedFiles < CSM2_CONFIG.goals.endorsedFiles) notes.push('endorsed files');
+    html += '<div style="margin-bottom:12px;padding:12px;background:var(--bg-card);border:1px solid var(--border-light);border-radius:6px;"><div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;"><div style="width:34px;height:34px;border-radius:50%;background:'+(i===0?'var(--gold)':i===1?'#c0c0c0':i===2?'#cd7f32':'var(--border)')+';display:flex;align-items:center;justify-content:center;color:white;font-weight:700;">'+(i+1)+'</div><div><div style="font-weight:600;color:var(--text-primary);">'+row.name+'</div><div style="font-size:12px;color:var(--text-muted);">KPI: '+(row.kpiScore || 0).toFixed(1)+'%</div></div></div>' +
+      '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:12px;"><div><div style="color:var(--text-muted);">Show</div><div style="font-weight:600;">'+percent(row.showRate)+'</div></div><div><div style="color:var(--text-muted);">No Show</div><div style="font-weight:600;">'+percent(row.noShowRate)+'</div></div><div><div style="color:var(--text-muted);">Approved</div><div style="font-weight:600;">'+money(row.approvedPersonalLoansAmount)+'</div></div><div><div style="color:var(--text-muted);">Endorsed</div><div style="font-weight:600;">'+Math.round(row.endorsedFiles || 0)+'</div></div></div>' +
+      (notes.length ? '<div style="margin-top:8px;padding:8px;background:rgba(255,107,107,0.1);border-left:2px solid var(--red);border-radius:3px;font-size:11px;">Coach focus: '+notes.join(', ')+'.</div>' : '') + '</div>';
+  });
+  document.getElementById('csm2BriefContent').innerHTML = html + '</div>';
+  document.getElementById('csm2BriefModal').classList.add('active');
+}
+function closeCsm2LeadershipBrief() {
+  document.getElementById('csm2BriefModal').classList.remove('active');
+}
+function showCsm2Dept() {
+  try { history.replaceState(null, '', '#csm-t2'); } catch(e) {}
+  if (window.DEPT_DISCLAIMERS) {
+    DEPT_DISCLAIMERS['csm-t2'] = { notes: 'Numbers are pulled from the CSM T2 Google Sheet tab. Current data uses the published CSM T2 tab.', alert: 'CSM T2 updates live from the published Google Sheet CSV gid 1690228347.' };
+  }
+  if (window.updateDisclaimer) updateDisclaimer('csm-t2');
+  document.querySelectorAll('.dept-nav-btn').forEach(function(b){ b.classList.remove('active'); });
+  var btn = document.querySelector('[data-dept="csm-t2"]');
+  if (btn) btn.classList.add('active');
+  document.querySelectorAll('.dept-placeholder').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.dept-section').forEach(function(s){ s.style.display = 'none'; });
+  var salesHeader = document.querySelector('.container > .header');
+  var salesStatsBar = document.getElementById('statsBar');
+  var salesTabNav = document.querySelector('.container > .tab-nav');
+  if (salesHeader) salesHeader.style.display = 'none';
+  if (salesStatsBar) salesStatsBar.style.display = 'none';
+  if (salesTabNav) salesTabNav.style.display = 'none';
+  ['tab-dashboard','tab-calculator','tab-history'].forEach(function(id){ var el = document.getElementById(id); if (el) el.classList.remove('active'); });
+  var section = document.getElementById('dept-csm-t2');
+  if (section) section.style.display = 'block';
+  switchCsm2Tab({ target: document.querySelector('#csm2TabNav .tab-btn') }, 'dashboard');
+  if (!csm2DataLoaded) { csm2DataLoaded = true; loadCsm2Data(); }
+}
+if (window.DEPT_DISCLAIMERS) {
+  DEPT_DISCLAIMERS['csm-t2'] = { notes: 'Numbers are pulled from the CSM T2 Google Sheet tab. Current data uses the published CSM T2 tab.', alert: 'CSM T2 updates live from the published Google Sheet CSV gid 1690228347.' };
+}
+var previousSwitchDeptForCsm2 = window.switchDept;
+window.switchDept = function(dept) {
+  if (dept === 'csm-t2') return showCsm2Dept();
+  return previousSwitchDeptForCsm2 ? previousSwitchDeptForCsm2(dept) : null;
+};
+window.switchCsm2Tab = switchCsm2Tab;
+window.showCsm2History = showCsm2History;
+window.runCsm2Forecast = runCsm2Forecast;
+window.openCsm2LeadershipBrief = openCsm2LeadershipBrief;
+window.closeCsm2LeadershipBrief = closeCsm2LeadershipBrief;
+window.loadCsm2Data = loadCsm2Data;
+if (location.hash.replace('#','') === 'csm-t2') setTimeout(showCsm2Dept, 350);
 })();
 </script>
 
