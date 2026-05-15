@@ -3314,6 +3314,7 @@
                 <tr>
                   <th></th>
                   <th></th>
+                  <th>Onboarding Rate</th>
                   <th>Time to Activation Rate</th>
                   <th>QA Audit Rate</th>
                   <th>Smart Credit Signups</th>
@@ -3428,6 +3429,7 @@
                 <tr>
                   <th></th>
                   <th></th>
+                  <th>Onboarding Rate</th>
                   <th>Time to Activation Rate</th>
                   <th>QA Audit Rate</th>
                   <th>Smart Credit Signups</th>
@@ -4128,14 +4130,14 @@ function renderCsmStats() {
 function getCsmTableCells(c, rank, badgeCls, nameCls, move, historyMode) {
   return '<td><div class="rank-badge '+badgeCls+'">'+rank+'</div></td>' +
     '<td><div class="avatar-cell">'+avatar(c.name, rank, !historyMode)+'<span class="'+nameCls+'">'+c.name+(move || '')+'</span></div></td>' +
-    '<td class="'+leqCls(c.activationRate,CSM_GOALS.activationRate)+'">'+pctText(c.activationRate)+'</td><td class="'+valCls(c.qaAuditRate,CSM_GOALS.qaAuditRate)+'">'+pctText(c.qaAuditRate)+'</td>' +
+    '<td class="'+valCls(c.onboardingRate,CSM_GOALS.onboardingRate)+'">'+pctText(c.onboardingRate)+'</td><td class="'+leqCls(c.activationRate,CSM_GOALS.activationRate)+'">'+pctText(c.activationRate)+'</td><td class="'+valCls(c.qaAuditRate,CSM_GOALS.qaAuditRate)+'">'+pctText(c.qaAuditRate)+'</td>' +
     '<td class="c-white">'+Math.round(c.smartCreditSignups)+'</td><td class="'+valCls(c.smartCreditConversionRate,CSM_GOALS.smartCreditConversionRate)+'">'+pctText(c.smartCreditConversionRate)+'</td><td class="c-white">'+money(c.smartCreditRevenue)+'</td>' +
     '<td class="'+valCls(c.personalLoansScheduled,CSM_GOALS.personalLoansScheduled)+'">'+Math.round(c.personalLoansScheduled)+'</td><td class="c-white">'+money(c.approvedPersonalLoansAmount)+'</td><td class="'+valCls(c.bizFundingScheduled,CSM_GOALS.bizFundingScheduled)+'">'+Math.round(c.bizFundingScheduled)+'</td>' +
     '<td class="c-white">'+Math.round(c.invoicesCollected)+'</td><td class="c-white">'+money(c.invoiceCollected)+'</td><td class="'+valCls(c.innerCircle,CSM_GOALS.innerCircle)+'">'+Math.round(c.innerCircle)+'</td><td class="'+valCls(c.lgfPro,CSM_GOALS.lgfPro)+'">'+Math.round(c.lgfPro)+'</td><td class="'+valCls(c.testimonials,CSM_GOALS.testimonials)+'">'+Math.round(c.testimonials)+'</td>' +
     '<td class="kpi-cell">'+kpiBar(c.kpiScore)+csmTooltip(c)+'</td>';
 }
 function getCsmTeamCells(team) {
-  return '<td></td><td>TEAM</td><td class="'+leqCls(team.activationRate,CSM_GOALS.activationRate)+'">'+pctText(team.activationRate)+'</td><td class="'+valCls(team.qaAuditRate,CSM_GOALS.qaAuditRate)+'">'+pctText(team.qaAuditRate)+'</td>' +
+  return '<td></td><td>TEAM</td><td class="'+valCls(team.onboardingRate,CSM_GOALS.onboardingRate)+'">'+pctText(team.onboardingRate)+'</td><td class="'+leqCls(team.activationRate,CSM_GOALS.activationRate)+'">'+pctText(team.activationRate)+'</td><td class="'+valCls(team.qaAuditRate,CSM_GOALS.qaAuditRate)+'">'+pctText(team.qaAuditRate)+'</td>' +
     '<td class="c-white">'+Math.round(team.smartCreditSignups)+'</td><td class="'+valCls(team.smartCreditConversionRate,CSM_GOALS.smartCreditConversionRate)+'">'+pctText(team.smartCreditConversionRate)+'</td><td class="c-white">'+money(team.smartCreditRevenue)+'</td>' +
     '<td class="'+valCls(team.personalLoansScheduled,CSM_GOALS.personalLoansScheduled)+'">'+Math.round(team.personalLoansScheduled)+'</td><td class="c-white">'+money(team.approvedPersonalLoansAmount)+'</td><td class="'+valCls(team.bizFundingScheduled,CSM_GOALS.bizFundingScheduled)+'">'+Math.round(team.bizFundingScheduled)+'</td>' +
     '<td class="c-white">'+Math.round(team.invoicesCollected)+'</td><td class="c-white">'+money(team.invoiceCollected)+'</td><td class="'+valCls(team.innerCircle,CSM_GOALS.innerCircle)+'">'+Math.round(team.innerCircle)+'</td><td class="'+valCls(team.lgfPro,CSM_GOALS.lgfPro)+'">'+Math.round(team.lgfPro)+'</td><td class="'+valCls(team.testimonials,CSM_GOALS.testimonials)+'">'+Math.round(team.testimonials)+'</td>' +
