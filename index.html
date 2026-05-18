@@ -3317,6 +3317,7 @@
                 <tr>
                   <th></th>
                   <th></th>
+                  <th>Fully Onboarded Leads</th>
                   <th>Onboarding Rate</th>
                   <th>Time to Activation Rate</th>
                   <th>QA Audit Rate</th>
@@ -3336,10 +3337,10 @@
               </thead>
               <tbody id="csmTableBody">
                 <tr class="goal-row">
-                  <td></td><td>GOAL</td><td>&ge;80%</td><td>&le;90%</td><td>&ge;95%</td><td></td><td>&ge;80%</td><td></td><td>&gt;5</td><td></td><td>&gt;2</td><td></td><td></td><td>&gt;5</td><td>&gt;5</td><td>&gt;5</td><td></td>
+                  <td></td><td>GOAL</td><td></td><td>&ge;80%</td><td>&le;90%</td><td>&ge;95%</td><td></td><td>&ge;80%</td><td></td><td>&gt;5</td><td></td><td>&gt;2</td><td></td><td></td><td>&gt;5</td><td>&gt;5</td><td>&gt;5</td><td></td>
                 </tr>
                 <tr class="weight-row">
-                  <td style="font-weight:700">RANK</td><td>WEIGHTED AVE</td><td>30%</td><td>10%</td><td>30%</td><td></td><td>10%</td><td></td><td>4%</td><td></td><td>4%</td><td></td><td></td><td>4%</td><td>4%</td><td>4%</td><td></td>
+                  <td style="font-weight:700">RANK</td><td>WEIGHTED AVE</td><td></td><td>30%</td><td>10%</td><td>30%</td><td></td><td>10%</td><td></td><td>4%</td><td></td><td>4%</td><td></td><td></td><td>4%</td><td>4%</td><td>4%</td><td></td>
                 </tr>
               </tbody>
             </table>
@@ -3432,6 +3433,7 @@
                 <tr>
                   <th></th>
                   <th></th>
+                  <th>Fully Onboarded Leads</th>
                   <th>Onboarding Rate</th>
                   <th>Time to Activation Rate</th>
                   <th>QA Audit Rate</th>
@@ -3451,10 +3453,10 @@
               </thead>
               <tbody id="csmHistoryTableBody">
                 <tr class="goal-row">
-                  <td></td><td>GOAL</td><td>&ge;80%</td><td>&le;90%</td><td>&ge;95%</td><td></td><td>&ge;80%</td><td></td><td>&gt;5</td><td></td><td>&gt;2</td><td></td><td></td><td>&gt;5</td><td>&gt;5</td><td>&gt;5</td><td></td>
+                  <td></td><td>GOAL</td><td></td><td>&ge;80%</td><td>&le;90%</td><td>&ge;95%</td><td></td><td>&ge;80%</td><td></td><td>&gt;5</td><td></td><td>&gt;2</td><td></td><td></td><td>&gt;5</td><td>&gt;5</td><td>&gt;5</td><td></td>
                 </tr>
                 <tr class="weight-row">
-                  <td style="font-weight:700">RANK</td><td>WEIGHTED AVE</td><td>30%</td><td>10%</td><td>30%</td><td></td><td>10%</td><td></td><td>4%</td><td></td><td>4%</td><td></td><td></td><td>4%</td><td>4%</td><td>4%</td><td></td>
+                  <td style="font-weight:700">RANK</td><td>WEIGHTED AVE</td><td></td><td>30%</td><td>10%</td><td>30%</td><td></td><td>10%</td><td></td><td>4%</td><td></td><td>4%</td><td></td><td></td><td>4%</td><td>4%</td><td>4%</td><td></td>
                 </tr>
               </tbody>
             </table>
@@ -4007,11 +4009,39 @@ function statRing(label, value, sub, goal, hl, spark){ return window.mkStatWithR
 function statCustom(label, value, sub){ return window.mkStatCustom ? mkStatCustom(label, value, sub) : '<div class="stat-card"><div class="stat-label">'+label+'</div><div class="stat-value">'+value+'</div><div class="stat-sub">'+(sub || '')+'</div></div>'; }
 
 function buildCsmRow(cols) {
-  // Current-month live tab dropped the 6 lead-tracking columns (Calls Taken..Onboard Days Avg),
-  // leaving ~17 cols. History sheets and the fallback CSV still use the 23-col layout.
+  // Layout A (full): rank,name,calls,cancelled,noShow,assigned,onboarded,onboardDays,...
+  if (cols.length >= 23) {
+    return {
+      rank: num(cols[0]), name: (cols[1] || '').trim().toUpperCase(),
+      hasLeadColumns: true,
+      callsTaken: num(cols[2]), cancelled: num(cols[3]), noShows: num(cols[4]),
+      assignedLeads: num(cols[5]), onboardedLeads: num(cols[6]), onboardDaysAvg: pct(cols[7]),
+      onboardingRate: pct(cols[8]), activationRate: pct(cols[9]), qaAuditRate: pct(cols[10]),
+      smartCreditSignups: num(cols[11]), smartCreditConversionRate: pct(cols[12]), smartCreditRevenue: mon(cols[13]),
+      personalLoansScheduled: num(cols[14]), approvedPersonalLoansAmount: mon(cols[15]), bizFundingScheduled: num(cols[16]),
+      invoicesCollected: num(cols[17]), invoiceCollected: mon(cols[18]), innerCircle: num(cols[19]), lgfPro: num(cols[20]),
+      testimonials: num(cols[21]), kpiScore: pct(cols[22])
+    };
+  }
+  // Layout B (current live): rank,name,calls,onboarding,activation,qa,...
+  if (cols.length >= 19) {
+    return {
+      rank: num(cols[0]), name: (cols[1] || '').trim().toUpperCase(),
+      hasLeadColumns: false,
+      callsTaken: num(cols[2]), cancelled: 0, noShows: 0,
+      assignedLeads: 0, onboardedLeads: 0, onboardDaysAvg: 0,
+      onboardingRate: pct(cols[3]), activationRate: pct(cols[4]), qaAuditRate: pct(cols[5]),
+      smartCreditSignups: num(cols[6]), smartCreditConversionRate: pct(cols[7]), smartCreditRevenue: mon(cols[8]),
+      personalLoansScheduled: num(cols[9]), approvedPersonalLoansAmount: mon(cols[10]), bizFundingScheduled: num(cols[11]),
+      invoicesCollected: num(cols[12]), invoiceCollected: mon(cols[13]), innerCircle: num(cols[14]), lgfPro: num(cols[15]),
+      testimonials: num(cols[16]), kpiScore: pct(cols[17])
+    };
+  }
+  // Layout C (older live): rank,name,onboarding,activation,qa,...
   if (cols.length <= 18) {
     return {
       rank: num(cols[0]), name: (cols[1] || '').trim().toUpperCase(),
+      hasLeadColumns: false,
       callsTaken: 0, cancelled: 0, noShows: 0,
       assignedLeads: 0, onboardedLeads: 0, onboardDaysAvg: 0,
       onboardingRate: pct(cols[2]), activationRate: pct(cols[3]), qaAuditRate: pct(cols[4]),
@@ -4021,16 +4051,7 @@ function buildCsmRow(cols) {
       testimonials: num(cols[15]), kpiScore: pct(cols[16])
     };
   }
-  return {
-    rank: num(cols[0]), name: (cols[1] || '').trim().toUpperCase(),
-    callsTaken: num(cols[2]), cancelled: num(cols[3]), noShows: num(cols[4]),
-    assignedLeads: num(cols[5]), onboardedLeads: num(cols[6]), onboardDaysAvg: pct(cols[7]),
-    onboardingRate: pct(cols[8]), activationRate: pct(cols[9]), qaAuditRate: pct(cols[10]),
-    smartCreditSignups: num(cols[11]), smartCreditConversionRate: pct(cols[12]), smartCreditRevenue: mon(cols[13]),
-    personalLoansScheduled: num(cols[14]), approvedPersonalLoansAmount: mon(cols[15]), bizFundingScheduled: num(cols[16]),
-    invoicesCollected: num(cols[17]), invoiceCollected: mon(cols[18]), innerCircle: num(cols[19]), lgfPro: num(cols[20]),
-    testimonials: num(cols[21]), kpiScore: pct(cols[22])
-  };
+  return null;
 }
 function parseCsmCSV(csv) {
   return String(csv || '').trim().split('\n').map(function(line){ return csvLine(line); }).filter(function(cols){
@@ -4045,6 +4066,31 @@ function parseCsmTeamCSV(csv) {
   }
   return null;
 }
+function detectCsmGvizLayout(table) {
+  var cols = table && Array.isArray(table.cols) ? table.cols : [];
+  var labels = cols.map(function(col){ return String((col && col.label) || '').toLowerCase(); });
+  return {
+    hasFullyOnboarded: labels.some(function(label){ return label.indexOf('fully onboarded leads') !== -1; }),
+    hasCallsTaken: labels.some(function(label){ return label.indexOf('calls taken') !== -1; })
+  };
+}
+function buildCsmGvizRow(cols, layout) {
+  // Current live layout now uses col[2] for Fully Onboarded Leads.
+  if (layout && layout.hasFullyOnboarded && cols.length >= 19) {
+    return {
+      rank: num(cols[0]), name: (cols[1] || '').trim().toUpperCase(),
+      hasLeadColumns: true,
+      callsTaken: 0, cancelled: 0, noShows: 0,
+      assignedLeads: 0, onboardedLeads: num(cols[2]), onboardDaysAvg: 0,
+      onboardingRate: pct(cols[3]), activationRate: pct(cols[4]), qaAuditRate: pct(cols[5]),
+      smartCreditSignups: num(cols[6]), smartCreditConversionRate: pct(cols[7]), smartCreditRevenue: mon(cols[8]),
+      personalLoansScheduled: num(cols[9]), approvedPersonalLoansAmount: mon(cols[10]), bizFundingScheduled: num(cols[11]),
+      invoicesCollected: num(cols[12]), invoiceCollected: mon(cols[13]), innerCircle: num(cols[14]), lgfPro: num(cols[15]),
+      testimonials: num(cols[16]), kpiScore: pct(cols[17])
+    };
+  }
+  return buildCsmRow(cols);
+}
 function gvizCellText(cell) {
   if (!cell) return '';
   if (cell.f != null && cell.f !== '') return String(cell.f);
@@ -4058,16 +4104,18 @@ function gvizRowToCols(row) {
   return cols;
 }
 function parseCsmGvizRows(table) {
+  var layout = detectCsmGvizLayout(table);
   var rows = table && Array.isArray(table.rows) ? table.rows : [];
   return rows.map(gvizRowToCols).filter(function(cols){
     return parseInt((cols[0] || '').trim(), 10) && (cols[1] || '').trim().toUpperCase() !== 'TEAM';
-  }).map(buildCsmRow).filter(function(r){ return r.name; });
+  }).map(function(cols){ return buildCsmGvizRow(cols, layout); }).filter(function(r){ return r && r.name; });
 }
 function parseCsmGvizTeam(table) {
+  var layout = detectCsmGvizLayout(table);
   var rows = table && Array.isArray(table.rows) ? table.rows : [];
   for (var i = 0; i < rows.length; i++) {
     var cols = gvizRowToCols(rows[i]);
-    if (((cols[1] || cols[0] || '').trim().toUpperCase()) === 'TEAM') return buildCsmRow(cols);
+    if (((cols[1] || cols[0] || '').trim().toUpperCase()) === 'TEAM') return buildCsmGvizRow(cols, layout);
   }
   return null;
 }
@@ -4119,6 +4167,7 @@ function buildCsmTeam(rows) {
   team.qaAuditRate /= n;
   team.smartCreditConversionRate /= n;
   team.kpiScore /= n;
+  team.hasLeadColumns = rows.some(function(r){ return !!r.hasLeadColumns; });
   return team;
 }
 function calculateCsmKPI(c) {
@@ -4202,8 +4251,11 @@ async function loadCsmData() {
 }
 function renderCsmStats() {
   var team = csmTeamData || buildCsmTeam(csmData);
+  var onboardedSub = team.assignedLeads > 0
+    ? Math.round(team.assignedLeads).toLocaleString('en-US') + ' assigned'
+    : 'live source';
   document.getElementById('csmStatsBar').innerHTML =
-    statRing('Fully Onboarded Leads', Math.round(team.onboardedLeads).toLocaleString('en-US'), Math.round(team.assignedLeads).toLocaleString('en-US') + ' assigned', Math.max(team.assignedLeads, 1), false, CSM_CONFIG.sparklines.onboarded) +
+    statRing('Fully Onboarded Leads', Math.round(team.onboardedLeads).toLocaleString('en-US'), onboardedSub, Math.max(team.assignedLeads, 1), false, CSM_CONFIG.sparklines.onboarded) +
     statRing('Onboarding Rate', pctText(team.onboardingRate), 'goal: 80%', CSM_GOALS.onboardingRate, false, CSM_CONFIG.sparklines.onboardingRate) +
     statCustom('Time to Activation', pctText(team.activationRate), '<span class="' + leqCls(team.activationRate, CSM_GOALS.activationRate) + '">goal: <=90%</span>') +
     statRing('QA Audit Rate', pctText(team.qaAuditRate), 'goal: 95%', CSM_GOALS.qaAuditRate, false, CSM_CONFIG.sparklines.qaAuditRate) +
@@ -4213,8 +4265,10 @@ function renderCsmStats() {
     mkCsmDeptHead();
 }
 function getCsmTableCells(c, rank, badgeCls, nameCls, move, historyMode) {
+  var onboarded = c.hasLeadColumns ? String(Math.round(c.onboardedLeads)) : '--';
   return '<td><div class="rank-badge '+badgeCls+'">'+rank+'</div></td>' +
     '<td><div class="avatar-cell">'+avatar(c.name, rank, !historyMode)+'<span class="'+nameCls+'">'+c.name+(move || '')+'</span></div></td>' +
+    '<td class="c-white">' + onboarded + '</td>' +
     '<td class="'+valCls(c.onboardingRate,CSM_GOALS.onboardingRate)+'">'+pctText(c.onboardingRate)+'</td><td class="'+leqCls(c.activationRate,CSM_GOALS.activationRate)+'">'+pctText(c.activationRate)+'</td><td class="'+valCls(c.qaAuditRate,CSM_GOALS.qaAuditRate)+'">'+pctText(c.qaAuditRate)+'</td>' +
     '<td class="c-white">'+Math.round(c.smartCreditSignups)+'</td><td class="'+valCls(c.smartCreditConversionRate,CSM_GOALS.smartCreditConversionRate)+'">'+pctText(c.smartCreditConversionRate)+'</td><td class="c-white">'+money(c.smartCreditRevenue)+'</td>' +
     '<td class="'+valCls(c.personalLoansScheduled,CSM_GOALS.personalLoansScheduled)+'">'+Math.round(c.personalLoansScheduled)+'</td><td class="c-white">'+money(c.approvedPersonalLoansAmount)+'</td><td class="'+valCls(c.bizFundingScheduled,CSM_GOALS.bizFundingScheduled)+'">'+Math.round(c.bizFundingScheduled)+'</td>' +
@@ -4222,7 +4276,8 @@ function getCsmTableCells(c, rank, badgeCls, nameCls, move, historyMode) {
     '<td class="kpi-cell">'+kpiBar(c.kpiScore)+csmTooltip(c)+'</td>';
 }
 function getCsmTeamCells(team) {
-  return '<td></td><td>TEAM</td><td class="'+valCls(team.onboardingRate,CSM_GOALS.onboardingRate)+'">'+pctText(team.onboardingRate)+'</td><td class="'+leqCls(team.activationRate,CSM_GOALS.activationRate)+'">'+pctText(team.activationRate)+'</td><td class="'+valCls(team.qaAuditRate,CSM_GOALS.qaAuditRate)+'">'+pctText(team.qaAuditRate)+'</td>' +
+  var onboarded = team.hasLeadColumns ? String(Math.round(team.onboardedLeads)) : '--';
+  return '<td></td><td>TEAM</td><td class="c-white">' + onboarded + '</td><td class="'+valCls(team.onboardingRate,CSM_GOALS.onboardingRate)+'">'+pctText(team.onboardingRate)+'</td><td class="'+leqCls(team.activationRate,CSM_GOALS.activationRate)+'">'+pctText(team.activationRate)+'</td><td class="'+valCls(team.qaAuditRate,CSM_GOALS.qaAuditRate)+'">'+pctText(team.qaAuditRate)+'</td>' +
     '<td class="c-white">'+Math.round(team.smartCreditSignups)+'</td><td class="'+valCls(team.smartCreditConversionRate,CSM_GOALS.smartCreditConversionRate)+'">'+pctText(team.smartCreditConversionRate)+'</td><td class="c-white">'+money(team.smartCreditRevenue)+'</td>' +
     '<td class="'+valCls(team.personalLoansScheduled,CSM_GOALS.personalLoansScheduled)+'">'+Math.round(team.personalLoansScheduled)+'</td><td class="c-white">'+money(team.approvedPersonalLoansAmount)+'</td><td class="'+valCls(team.bizFundingScheduled,CSM_GOALS.bizFundingScheduled)+'">'+Math.round(team.bizFundingScheduled)+'</td>' +
     '<td class="c-white">'+Math.round(team.invoicesCollected)+'</td><td class="c-white">'+money(team.invoiceCollected)+'</td><td class="'+valCls(team.innerCircle,CSM_GOALS.innerCircle)+'">'+Math.round(team.innerCircle)+'</td><td class="'+valCls(team.lgfPro,CSM_GOALS.lgfPro)+'">'+Math.round(team.lgfPro)+'</td><td class="'+valCls(team.testimonials,CSM_GOALS.testimonials)+'">'+Math.round(team.testimonials)+'</td>' +
