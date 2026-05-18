@@ -26,6 +26,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="author" content="Franco Salvacion — High Thrive LLC">
 <meta name="copyright" content="Copyright © 2026 Franco Salvacion / High Thrive LLC. All Rights Reserved.">
 <meta name="description" content="LGF Sales Department KPI Dashboard — Lean Six Sigma Black Belt methodology. Proprietary system by Franco Salvacion.">
@@ -3902,7 +3905,7 @@ var CSM_CONFIG = {
   departmentName: 'CSM T1 Department',
   deptHead: { name: 'JEAN VALENCIA', title: 'CSM T1 DEPT HEAD', photoKey: 'JEAN' },
   sheetBaseUrl: (window.DASHBOARD_CONFIG && DASHBOARD_CONFIG.sheetBaseUrl) || 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQXUlD0_lAVDEey28qjODng41eQ84IVaX7sDGZ_EmKnROiKiMPYIzXRCcf72IK14nCxiZKpvCiqdkFv/pub',
-  currentMonthGid: '54522210',
+  currentMonthGid: '1363755589',
   historyTabs: { 'Mar 2026': '1977718966', 'Apr 2026': '1744219655' },
   goals: { onboardingRate: 80, activationRate: 90, qaAuditRate: 95, smartCreditConversionRate: 80, personalLoansScheduled: 5, bizFundingScheduled: 2, innerCircle: 5, lgfPro: 5, testimonials: 5 },
   weights: { onboardingRate: 0.30, activationRate: 0.10, qaAuditRate: 0.30, smartCreditConversionRate: 0.10, personalLoansScheduled: 0.04, bizFundingScheduled: 0.04, innerCircle: 0.04, lgfPro: 0.04, testimonials: 0.04 },
@@ -3931,10 +3934,14 @@ function applyCsmTeamPhotos() {
   }
 }
 applyCsmTeamPhotos();
-var CSM_SHEET_URL = CSM_CONFIG.sheetBaseUrl + '?gid=' + CSM_CONFIG.currentMonthGid + '&single=true&output=csv';
-var CSM_HISTORY_URLS = {};
+// Use JSONP with /gviz/tq so the static HTML file can read Sheets data without browser CORS blocking.
+var CSM_GVIZ_BASE = 'https://docs.google.com/spreadsheets/d/12glaANnP2BsQfH_kHfRlzA40JdWAU-PJgDT-56yRV8k/gviz/tq';
+var CSM_JSONP_TIMEOUT_MS = 15000;
+var csmJsonpCounter = 0;
+var CSM_SHEET_GID = CSM_CONFIG.currentMonthGid;
+var CSM_HISTORY_GIDS = {};
 Object.keys(CSM_CONFIG.historyTabs).forEach(function(k){
-  CSM_HISTORY_URLS[k] = CSM_CONFIG.sheetBaseUrl + '?gid=' + CSM_CONFIG.historyTabs[k] + '&single=true&output=csv';
+  CSM_HISTORY_GIDS[k] = CSM_CONFIG.historyTabs[k];
 });
 var CSM_GOALS = CSM_CONFIG.goals;
 var CSM_WEIGHTS = CSM_CONFIG.weights;
@@ -4000,6 +4007,20 @@ function statRing(label, value, sub, goal, hl, spark){ return window.mkStatWithR
 function statCustom(label, value, sub){ return window.mkStatCustom ? mkStatCustom(label, value, sub) : '<div class="stat-card"><div class="stat-label">'+label+'</div><div class="stat-value">'+value+'</div><div class="stat-sub">'+(sub || '')+'</div></div>'; }
 
 function buildCsmRow(cols) {
+  // Current-month live tab dropped the 6 lead-tracking columns (Calls Taken..Onboard Days Avg),
+  // leaving ~17 cols. History sheets and the fallback CSV still use the 23-col layout.
+  if (cols.length <= 18) {
+    return {
+      rank: num(cols[0]), name: (cols[1] || '').trim().toUpperCase(),
+      callsTaken: 0, cancelled: 0, noShows: 0,
+      assignedLeads: 0, onboardedLeads: 0, onboardDaysAvg: 0,
+      onboardingRate: pct(cols[2]), activationRate: pct(cols[3]), qaAuditRate: pct(cols[4]),
+      smartCreditSignups: num(cols[5]), smartCreditConversionRate: pct(cols[6]), smartCreditRevenue: mon(cols[7]),
+      personalLoansScheduled: num(cols[8]), approvedPersonalLoansAmount: mon(cols[9]), bizFundingScheduled: num(cols[10]),
+      invoicesCollected: num(cols[11]), invoiceCollected: mon(cols[12]), innerCircle: num(cols[13]), lgfPro: num(cols[14]),
+      testimonials: num(cols[15]), kpiScore: pct(cols[16])
+    };
+  }
   return {
     rank: num(cols[0]), name: (cols[1] || '').trim().toUpperCase(),
     callsTaken: num(cols[2]), cancelled: num(cols[3]), noShows: num(cols[4]),
@@ -4023,6 +4044,68 @@ function parseCsmTeamCSV(csv) {
     if (((cols[1] || cols[0] || '').trim().toUpperCase()) === 'TEAM') return buildCsmRow(cols);
   }
   return null;
+}
+function gvizCellText(cell) {
+  if (!cell) return '';
+  if (cell.f != null && cell.f !== '') return String(cell.f);
+  if (cell.v == null) return '';
+  return String(cell.v);
+}
+function gvizRowToCols(row) {
+  var cells = row && row.c ? row.c : [];
+  var cols = [];
+  for (var i = 0; i < cells.length; i++) cols.push(gvizCellText(cells[i]));
+  return cols;
+}
+function parseCsmGvizRows(table) {
+  var rows = table && Array.isArray(table.rows) ? table.rows : [];
+  return rows.map(gvizRowToCols).filter(function(cols){
+    return parseInt((cols[0] || '').trim(), 10) && (cols[1] || '').trim().toUpperCase() !== 'TEAM';
+  }).map(buildCsmRow).filter(function(r){ return r.name; });
+}
+function parseCsmGvizTeam(table) {
+  var rows = table && Array.isArray(table.rows) ? table.rows : [];
+  for (var i = 0; i < rows.length; i++) {
+    var cols = gvizRowToCols(rows[i]);
+    if (((cols[1] || cols[0] || '').trim().toUpperCase()) === 'TEAM') return buildCsmRow(cols);
+  }
+  return null;
+}
+function loadCsmSheetJsonp(gid) {
+  return new Promise(function(resolve, reject) {
+    var callbackName = '__csmGvizCb_' + Date.now() + '_' + (++csmJsonpCounter);
+    var script = document.createElement('script');
+    var done = false;
+    var timer = setTimeout(function() {
+      cleanup();
+      reject(new Error('CSM T1 JSONP timeout for gid ' + gid));
+    }, CSM_JSONP_TIMEOUT_MS);
+    function cleanup() {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      if (script.parentNode) script.parentNode.removeChild(script);
+      try { delete window[callbackName]; } catch(e) { window[callbackName] = void 0; }
+    }
+    window[callbackName] = function(resp) {
+      cleanup();
+      if (!resp || resp.status !== 'ok' || !resp.table || !Array.isArray(resp.table.rows)) {
+        var status = resp && resp.status ? resp.status : 'unknown';
+        reject(new Error('CSM T1 JSONP status ' + status + ' for gid ' + gid));
+        return;
+      }
+      resolve(resp.table);
+    };
+    script.onerror = function() {
+      cleanup();
+      reject(new Error('CSM T1 JSONP network error for gid ' + gid));
+    };
+    script.src = CSM_GVIZ_BASE +
+      '?gid=' + encodeURIComponent(gid) +
+      '&tqx=' + encodeURIComponent('out:json;responseHandler:' + callbackName) +
+      '&t=' + Date.now();
+    document.head.appendChild(script);
+  });
 }
 function buildCsmTeam(rows) {
   var n = rows.length || 1;
@@ -4075,30 +4158,32 @@ async function loadCsmData() {
   var loading = document.getElementById('csmLoadingIndicator');
   var content = document.getElementById('csmDashboardContent');
   if (csmIsFirstLoad && loading && content) { loading.style.display = 'block'; content.style.display = 'none'; }
+  var loadStatus = '';
   try {
-    var bust = '&t=' + Date.now();
-    var historyKeys = Object.keys(CSM_HISTORY_URLS);
-    var responses = await Promise.all([fetch(CSM_SHEET_URL + bust)].concat(historyKeys.map(function(k){ return fetch(CSM_HISTORY_URLS[k] + bust); })));
-    var texts = await Promise.all(responses.map(function(r){ return r.text(); }));
-    var currentRows = parseCsmCSV(texts[0]);
+    var historyKeys = Object.keys(CSM_HISTORY_GIDS);
+    var tables = await Promise.all([loadCsmSheetJsonp(CSM_SHEET_GID)].concat(historyKeys.map(function(k){ return loadCsmSheetJsonp(CSM_HISTORY_GIDS[k]); })));
+    var currentRows = parseCsmGvizRows(tables[0]);
     if (currentRows.length) {
       csmData = currentRows;
-      csmTeamData = parseCsmTeamCSV(texts[0]) || buildCsmTeam(currentRows);
+      csmTeamData = parseCsmGvizTeam(tables[0]) || buildCsmTeam(currentRows);
       document.getElementById('csmLastUpdated').textContent = 'Live -- updated ' + new Date().toLocaleTimeString();
+    } else {
+      loadStatus = 'parsed 0 rows from gid ' + CSM_CONFIG.currentMonthGid;
     }
     historyKeys.forEach(function(k, i){
-      var rows = parseCsmCSV(texts[i + 1]);
-      if (rows.length) CSM_HISTORY_DATA[k] = { month: k.replace('Mar', 'March').replace('Apr', 'April'), goals: CSM_GOALS, weights: CSM_WEIGHTS, csms: rows, team: parseCsmTeamCSV(texts[i + 1]) || buildCsmTeam(rows) };
+      var rows = parseCsmGvizRows(tables[i + 1]);
+      if (rows.length) CSM_HISTORY_DATA[k] = { month: k.replace('Mar', 'March').replace('Apr', 'April'), goals: CSM_GOALS, weights: CSM_WEIGHTS, csms: rows, team: parseCsmGvizTeam(tables[i + 1]) || buildCsmTeam(rows) };
     });
   } catch(e) {
+    loadStatus = (e && e.message) ? e.message : 'JSONP failed';
     csmData = parseCsmCSV(CSM_FALLBACK_CSV);
     csmTeamData = parseCsmTeamCSV(CSM_FALLBACK_CSV) || buildCsmTeam(csmData);
-    document.getElementById('csmLastUpdated').textContent = 'Offline -- using CSM fallback data';
+    document.getElementById('csmLastUpdated').textContent = 'Offline -- ' + loadStatus;
   }
   if (!csmData.length) {
     csmData = parseCsmCSV(CSM_FALLBACK_CSV);
     csmTeamData = parseCsmTeamCSV(CSM_FALLBACK_CSV) || buildCsmTeam(csmData);
-    document.getElementById('csmLastUpdated').textContent = 'Offline -- using CSM fallback data';
+    document.getElementById('csmLastUpdated').textContent = 'Offline -- ' + (loadStatus || 'using CSM fallback data');
   }
   csmData.forEach(function(c){ if (!(c.kpiScore > 0)) c.kpiScore = calculateCsmKPI(c); });
   var now = new Date();
