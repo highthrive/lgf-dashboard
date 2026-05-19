@@ -4754,9 +4754,16 @@ function ensureClosersClosedCallRevColumn() {
   });
 }
 async function refreshClosedCallRevFromSource() {
-  if (typeof GOOGLE_SHEET_CSV_URL === 'undefined' || !GOOGLE_SHEET_CSV_URL) return;
+  var liveUrl = '';
+  if (typeof getSheetCsvUrl === 'function') {
+    // Use direct sheet tab CSV (gviz) to avoid published-feed caching delays.
+    liveUrl = getSheetCsvUrl('Closers');
+  } else if (typeof GOOGLE_SHEET_CSV_URL !== 'undefined' && GOOGLE_SHEET_CSV_URL) {
+    liveUrl = GOOGLE_SHEET_CSV_URL;
+  }
+  if (!liveUrl) return;
   try {
-    var response = await fetch(GOOGLE_SHEET_CSV_URL + '&t=' + Date.now());
+    var response = await fetch(liveUrl + '&t=' + Date.now());
     var text = await response.text();
     var map = parseClosersClosedCallRevMap(text);
     applyClosedCallRevToClosersData(map);
