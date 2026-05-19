@@ -2845,6 +2845,7 @@
                 <th>Conversion Rate</th>
                 <th># of Refunds</th>
                 <th>Refund Rate %</th>
+                <th>CLOSED CALL REV</th>
                 <th>Frontend Rev Gen</th>
                 <th>Backend Rev Gen</th>
                 <th>Total Rev Gen</th>
@@ -2854,10 +2855,10 @@
             </thead>
             <tbody id="tableBody">
               <tr class="goal-row">
-                <td></td><td>GOAL</td><td>90</td><td>225</td><td></td><td></td><td></td><td>&gt;40</td><td>&gt;40%</td><td>&gt;45%</td><td></td><td>&lt;10%</td><td>&gt;$25k</td><td></td><td></td><td>once a week</td><td></td>
+                <td></td><td>GOAL</td><td>90</td><td>225</td><td></td><td></td><td></td><td>&gt;40</td><td>&gt;40%</td><td>&gt;45%</td><td></td><td>&lt;10%</td><td></td><td>&gt;$25k</td><td></td><td></td><td>once a week</td><td></td>
               </tr>
               <tr class="weight-row">
-                <td style="font-weight:700">RANK</td><td>WEIGHTED AVE</td><td></td><td></td><td></td><td></td><td></td><td>25%</td><td>10%</td><td>30%</td><td></td><td>10%</td><td>25%</td><td></td><td></td><td></td><td></td>
+                <td style="font-weight:700">RANK</td><td>WEIGHTED AVE</td><td></td><td></td><td></td><td></td><td></td><td>25%</td><td>10%</td><td>30%</td><td></td><td>10%</td><td></td><td>25%</td><td></td><td></td><td></td><td></td>
               </tr>
             </tbody>
           </table>
@@ -4667,6 +4668,98 @@ function applyCloserCardExactMoney() {
   setCloserStatValue('Last Month', money(DASHBOARD_CONFIG.lastMonthRev));
   setCloserStatValue('Front End Rev Goal', money(DASHBOARD_CONFIG.thisMonthGoal));
 }
+function parseClosersClosedCallRevMap(csvText) {
+  var lines = String(csvText || '').trim().split(/\r?\n/);
+  if (!lines.length) return {};
+  var headerIndex = -1;
+  var nameIndex = -1;
+  var closedCallRevIndex = -1;
+
+  for (var i = 0; i < lines.length; i++) {
+    var cols = csvLine(lines[i]);
+    for (var j = 0; j < cols.length; j++) {
+      var h = String(cols[j] || '').trim().toUpperCase();
+      if (h === 'NAME') nameIndex = j;
+      if (h.indexOf('CLOSED CALL REV') >= 0) closedCallRevIndex = j;
+    }
+    if (nameIndex >= 0 && closedCallRevIndex >= 0) {
+      headerIndex = i;
+      break;
+    }
+  }
+
+  if (headerIndex < 0 || nameIndex < 0 || closedCallRevIndex < 0) return {};
+
+  var map = {};
+  for (var k = headerIndex + 1; k < lines.length; k++) {
+    var row = csvLine(lines[k]);
+    var rawName = row[nameIndex] ? String(row[nameIndex]).trim().toUpperCase() : '';
+    if (!rawName || rawName === 'GOAL' || rawName === 'WEIGHTED AVE') continue;
+    if (rawName === 'TEAM') break;
+    var rankRaw = row[0] ? String(row[0]).trim() : '';
+    if (!rankRaw || isNaN(parseInt(rankRaw, 10))) continue;
+    map[rawName] = mon(row[closedCallRevIndex]);
+  }
+  return map;
+}
+function applyClosedCallRevToClosersData(map) {
+  if (!map || typeof closersData === 'undefined' || !Array.isArray(closersData)) return;
+  closersData.forEach(function(row) {
+    var key = String(row.name || '').trim().toUpperCase();
+    if (Object.prototype.hasOwnProperty.call(map, key)) {
+      row.closedCallRev = Number(map[key]) || 0;
+    } else if (typeof row.closedCallRev === 'undefined') {
+      row.closedCallRev = 0;
+    }
+  });
+}
+function ensureClosersClosedCallRevColumn() {
+  var tbody = document.getElementById('tableBody');
+  if (!tbody || typeof closersData === 'undefined' || !Array.isArray(closersData)) return;
+  var sorted = closersData.slice().sort(function(a, b) { return (b.kpiScore || 0) - (a.kpiScore || 0); });
+  var totalClosedCallRev = sorted.reduce(function(sum, row) { return sum + (Number(row.closedCallRev) || 0); }, 0);
+
+  var rows = tbody.querySelectorAll('tr');
+  rows.forEach(function(tr) {
+    var tds = tr.querySelectorAll('td');
+    if (tds.length >= 18) return;
+    if (tds.length < 13) return;
+
+    var newTd = document.createElement('td');
+    var rowLabel = tds[1] ? String(tds[1].textContent || '').trim().toUpperCase() : '';
+    var rankText = tds[0] ? String(tds[0].textContent || '').trim() : '';
+    var rank = parseInt(rankText, 10);
+
+    if (!isNaN(rank) && rank > 0) {
+      var entry = sorted[rank - 1];
+      newTd.textContent = money(entry && entry.closedCallRev ? entry.closedCallRev : 0);
+      newTd.className = 'c-white';
+    } else if (rowLabel === 'TEAM') {
+      newTd.textContent = money(totalClosedCallRev);
+      newTd.className = 'c-white';
+    } else if (tr.classList.contains('pace-row')) {
+      newTd.textContent = money(0);
+      newTd.className = 'c-white';
+    } else {
+      newTd.textContent = '';
+    }
+
+    tr.insertBefore(newTd, tds[12]);
+  });
+}
+async function refreshClosedCallRevFromSource() {
+  if (typeof GOOGLE_SHEET_CSV_URL === 'undefined' || !GOOGLE_SHEET_CSV_URL) return;
+  try {
+    var response = await fetch(GOOGLE_SHEET_CSV_URL + '&t=' + Date.now());
+    var text = await response.text();
+    var map = parseClosersClosedCallRevMap(text);
+    applyClosedCallRevToClosersData(map);
+    ensureClosersClosedCallRevColumn();
+    applyClosersPaceRowFix();
+  } catch (err) {
+    // Keep current data if source fetch fails.
+  }
+}
 if (typeof renderStats === 'function') {
   var originalRenderStats = renderStats;
   renderStats = function() {
@@ -4692,7 +4785,7 @@ function applyClosersPaceRowFix() {
 
   var totals = {
     callsTaken: 0, booked: 0, cancelled: 0, resched: 0, noShows: 0,
-    closed: 0, refunds: 0, frontendRev: 0, backendRev: 0, totalRev: 0,
+    closed: 0, refunds: 0, closedCallRev: 0, frontendRev: 0, backendRev: 0, totalRev: 0,
     showRate: 0, conversionRate: 0, refundRate: 0
   };
   closersData.forEach(function(c) {
@@ -4703,6 +4796,7 @@ function applyClosersPaceRowFix() {
     totals.noShows += Number(c.noShows) || 0;
     totals.closed += Number(c.closed) || 0;
     totals.refunds += Number(c.refunds) || 0;
+    totals.closedCallRev += Number(c.closedCallRev) || 0;
     totals.frontendRev += Number(c.frontendRev) || 0;
     totals.backendRev += Number(c.backendRev) || 0;
     totals.totalRev += Number(c.totalRev) || 0;
@@ -4723,12 +4817,13 @@ function applyClosersPaceRowFix() {
   var pNoShows = Math.round(projected(totals.noShows));
   var pClosed = Math.round(projected(totals.closed));
   var pRefunds = Math.round(projected(totals.refunds));
+  var pClosedCallRev = projected(totals.closedCallRev);
   var pFrontendRev = projected(totals.frontendRev);
   var pBackendRev = projected(totals.backendRev);
   var pTotalRev = projected(totals.totalRev);
 
   var td = paceRow.querySelectorAll('td');
-  if (td.length < 17) return;
+  if (td.length < 18) return;
 
   td[2].textContent = pCalls.toLocaleString('en-US');
   td[2].className = pCalls >= GOALS.callsTaken ? 'pace-on-track' : 'pace-behind';
@@ -4745,16 +4840,20 @@ function applyClosersPaceRowFix() {
   td[10].textContent = pRefunds.toLocaleString('en-US');
   td[11].textContent = totals.refundRate.toFixed(0) + '%';
   td[11].className = totals.refundRate <= GOALS.refundRate ? 'pace-on-track' : 'pace-behind';
-  td[12].textContent = money(pFrontendRev);
-  td[12].className = pFrontendRev >= GOALS.frontendRev ? 'pace-on-track' : 'pace-behind';
-  td[13].textContent = money(pBackendRev);
-  td[14].textContent = money(pTotalRev);
+  td[12].textContent = money(pClosedCallRev);
+  td[12].className = 'c-white';
+  td[13].textContent = money(pFrontendRev);
+  td[13].className = pFrontendRev >= GOALS.frontendRev ? 'pace-on-track' : 'pace-behind';
+  td[14].textContent = money(pBackendRev);
+  td[15].textContent = money(pTotalRev);
 }
 if (typeof renderTable === 'function') {
   var originalRenderTable = renderTable;
   renderTable = function() {
     var result = originalRenderTable.apply(this, arguments);
+    ensureClosersClosedCallRevColumn();
     applyClosersPaceRowFix();
+    refreshClosedCallRevFromSource();
     return result;
   };
 }
