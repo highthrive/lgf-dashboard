@@ -4529,6 +4529,9 @@ var SOURCE_SHEET_ID = '12glaANnP2BsQfH_kHfRlzA40JdWAU-PJgDT-56yRV8k';
 function getSheetCsvUrl(sheetName) {
   return 'https://docs.google.com/spreadsheets/d/' + SOURCE_SHEET_ID + '/gviz/tq?tqx=out:csv&sheet=' + encodeURIComponent(sheetName);
 }
+if (typeof GOOGLE_SHEET_CSV_URL !== 'undefined') {
+  GOOGLE_SHEET_CSV_URL = getSheetCsvUrl('Closers');
+}
 if (typeof HISTORY_SHEET_URLS !== 'undefined') {
   HISTORY_SHEET_URLS['Feb 2026'] = getSheetCsvUrl('Closers - History - February 2026');
   HISTORY_SHEET_URLS['Mar 2026'] = getSheetCsvUrl('Closers - History - March 2026');
@@ -4658,6 +4661,7 @@ function setCloserStatValue(label, value) {
 }
 function closerFrontendTeamRev() {
   if (typeof closersData === 'undefined' || !Array.isArray(closersData)) return 0;
+  normalizeClosersRevenueColumns();
   return closersData.reduce(function(sum, row) {
     return sum + (Number(row.frontendRev) || 0);
   }, 0);
@@ -4669,31 +4673,61 @@ function applyCloserCardExactMoney() {
   setCloserStatValue('Front End Rev Goal', money(DASHBOARD_CONFIG.thisMonthGoal));
 }
 function parseClosersClosedCallRevMap(csvText) {
+  var revenueMap = parseClosersRevenueMap(csvText);
+  var closedMap = {};
+  Object.keys(revenueMap).forEach(function(key) {
+    closedMap[key] = revenueMap[key].closedCallRev;
+  });
+  return closedMap;
+}
+function parseClosersRevenueMap(csvText) {
   var lines = String(csvText || '').trim().split(/\r?\n/);
   if (!lines.length) return {};
   var headerIndex = -1;
   var nameIndex = 1; // fallback: Closers tab column B
   var closedCallRevIndex = -1;
-  var fixedClosedCallRevIndex = 12; // Closers tab column M (A=0)
+  var frontendRevIndex = -1;
+  var backendRevIndex = -1;
+  var totalRevIndex = -1;
+  var sevenFigIndex = -1;
+  var kpiScoreIndex = -1;
+  var fixed = {
+    closedCallRev: 12, // Closers tab column M (A=0)
+    frontendRev: 13,
+    backendRev: 14,
+    totalRev: 15,
+    sevenFig: 16,
+    kpiScore: 17
+  };
 
   for (var i = 0; i < lines.length; i++) {
     var cols = csvLine(lines[i]);
     for (var j = 0; j < cols.length; j++) {
       var h = String(cols[j] || '').trim().toUpperCase();
-      if (h === 'NAME') nameIndex = j;
+      if (h === 'NAME' || h === 'CLOSER') nameIndex = j;
       if (
         h.indexOf('CLOSED CALL REV') >= 0 ||
         h.indexOf('CLOSED REV CALL') >= 0 ||
         h === 'CLOSED REV'
       ) closedCallRevIndex = j;
+      if (h === 'FRONTEND REV' || h.indexOf('FRONTEND REV GEN') >= 0) frontendRevIndex = j;
+      if (h === 'BACKEND REV' || h.indexOf('BACKEND REV GEN') >= 0) backendRevIndex = j;
+      if (h === 'TOTAL REV' || h.indexOf('TOTAL REV GEN') >= 0) totalRevIndex = j;
+      if (h.indexOf('7-FIG') >= 0 || h.indexOf('7 FIG') >= 0) sevenFigIndex = j;
+      if (h.indexOf('KPI SCORE') >= 0) kpiScoreIndex = j;
     }
-    if (nameIndex >= 0 && (closedCallRevIndex >= 0 || cols.length > fixedClosedCallRevIndex)) {
+    if (nameIndex >= 0 && (closedCallRevIndex >= 0 || cols.length > fixed.closedCallRev)) {
       headerIndex = i;
       break;
     }
   }
 
-  if (closedCallRevIndex < 0) closedCallRevIndex = fixedClosedCallRevIndex;
+  if (closedCallRevIndex < 0) closedCallRevIndex = fixed.closedCallRev;
+  if (frontendRevIndex < 0) frontendRevIndex = fixed.frontendRev;
+  if (backendRevIndex < 0) backendRevIndex = fixed.backendRev;
+  if (totalRevIndex < 0) totalRevIndex = fixed.totalRev;
+  if (sevenFigIndex < 0) sevenFigIndex = fixed.sevenFig;
+  if (kpiScoreIndex < 0) kpiScoreIndex = fixed.kpiScore;
   if (headerIndex < 0 || nameIndex < 0) return {};
 
   var map = {};
@@ -4704,9 +4738,31 @@ function parseClosersClosedCallRevMap(csvText) {
     if (rawName === 'TEAM') break;
     var rankRaw = row[0] ? String(row[0]).trim() : '';
     if (!rankRaw || isNaN(parseInt(rankRaw, 10))) continue;
-    map[rawName] = mon(row[closedCallRevIndex]);
+    map[rawName] = {
+      closedCallRev: mon(row[closedCallRevIndex]),
+      frontendRev: mon(row[frontendRevIndex]),
+      backendRev: mon(row[backendRevIndex]),
+      totalRev: mon(row[totalRevIndex]),
+      sevenFig: num(row[sevenFigIndex]),
+      kpiScore: pct(row[kpiScoreIndex])
+    };
   }
   return map;
+}
+function applyClosersRevenueMapToRows(rows, map) {
+  if (!map || !rows || !Array.isArray(rows)) return;
+  rows.forEach(function(row) {
+    var key = String(row.name || '').trim().toUpperCase();
+    if (!Object.prototype.hasOwnProperty.call(map, key)) return;
+    var source = map[key];
+    row.closedCallRev = Number(source.closedCallRev) || 0;
+    row.frontendRev = Number(source.frontendRev) || 0;
+    row.backendRev = Number(source.backendRev) || 0;
+    row.totalRev = Number(source.totalRev) || 0;
+    row.sevenFig = Number(source.sevenFig) || 0;
+    row.kpiScore = Number(source.kpiScore) || 0;
+    row.__closedCallRevFromCsv = true;
+  });
 }
 function applyClosedCallRevToClosersData(map) {
   if (!map || typeof closersData === 'undefined' || !Array.isArray(closersData)) return;
@@ -4719,38 +4775,177 @@ function applyClosedCallRevToClosersData(map) {
     }
   });
 }
+function normalizeClosersRevenueColumns() {
+  if (typeof closersData === 'undefined' || !Array.isArray(closersData)) return;
+  closersData.forEach(function(row) {
+    if (!row || row.__closedCallRevFromCsv || row.__closedCallRevNormalized) {
+      if (row && typeof row.closedCallRev === 'undefined') row.closedCallRev = 0;
+      return;
+    }
+    var existingClosed = Number(row.closedCallRev) || 0;
+    var oldFrontend = Number(row.frontendRev) || 0;
+    var oldBackend = Number(row.backendRev) || 0;
+    var oldTotal = Number(row.totalRev) || 0;
+    var oldSevenFig = Number(row.sevenFig) || 0;
+    var looksShifted =
+      oldFrontend > 0 &&
+      oldBackend > oldFrontend &&
+      oldSevenFig > oldTotal &&
+      (!existingClosed || Math.abs(existingClosed - oldFrontend) < 0.01);
+
+    if (looksShifted) {
+      row.closedCallRev = oldFrontend;
+      row.frontendRev = oldBackend;
+      row.backendRev = oldTotal;
+      row.totalRev = oldSevenFig;
+      row.sevenFig = 0;
+      row.__closedCallRevNormalized = true;
+    } else if (typeof row.closedCallRev === 'undefined') {
+      row.closedCallRev = 0;
+    }
+  });
+}
+if (typeof parseCSV === 'function' && !parseCSV.__closedCallRevAware) {
+  var originalParseCSVForClosedCallRev = parseCSV;
+  parseCSV = function(csvText) {
+    var rows = originalParseCSVForClosedCallRev.apply(this, arguments);
+    applyClosersRevenueMapToRows(rows, parseClosersRevenueMap(csvText));
+    return rows;
+  };
+  parseCSV.__closedCallRevAware = true;
+  if (typeof window !== 'undefined') window.parseCSV = parseCSV;
+}
+var CLOSERS_JSONP_TIMEOUT_MS = 15000;
+var closersJsonpCounter = 0;
+function closersGvizCellText(cell) {
+  if (!cell) return '';
+  if (cell.f != null && cell.f !== '') return String(cell.f);
+  if (cell.v == null) return '';
+  return String(cell.v);
+}
+function closersGvizRowToCols(row) {
+  var cells = row && row.c ? row.c : [];
+  var cols = [];
+  for (var i = 0; i < cells.length; i++) cols.push(closersGvizCellText(cells[i]));
+  return cols;
+}
+function closersCsvLine(cols) {
+  return cols.map(function(value) {
+    return '"' + String(value == null ? '' : value).replace(/"/g, '""') + '"';
+  }).join(',');
+}
+function closersGvizTableToCsv(table) {
+  var header = (table && Array.isArray(table.cols) ? table.cols : []).map(function(col) {
+    return (col && col.label) || '';
+  });
+  var rows = table && Array.isArray(table.rows) ? table.rows : [];
+  return [closersCsvLine(header)].concat(rows.map(function(row) {
+    return closersCsvLine(closersGvizRowToCols(row));
+  })).join('\n');
+}
+function loadClosersSheetJsonp(gid) {
+  return new Promise(function(resolve, reject) {
+    var callbackName = '__closersGvizCb_' + Date.now() + '_' + (++closersJsonpCounter);
+    var script = document.createElement('script');
+    var done = false;
+    var timer = setTimeout(function() {
+      cleanup();
+      reject(new Error('Closers JSONP timeout for gid ' + gid));
+    }, CLOSERS_JSONP_TIMEOUT_MS);
+    function cleanup() {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      if (script.parentNode) script.parentNode.removeChild(script);
+      try { delete window[callbackName]; } catch(e) { window[callbackName] = void 0; }
+    }
+    window[callbackName] = function(resp) {
+      cleanup();
+      if (!resp || resp.status !== 'ok' || !resp.table || !Array.isArray(resp.table.rows)) {
+        reject(new Error('Closers JSONP status ' + ((resp && resp.status) || 'unknown') + ' for gid ' + gid));
+        return;
+      }
+      resolve(resp.table);
+    };
+    script.onerror = function() {
+      cleanup();
+      reject(new Error('Closers JSONP network error for gid ' + gid));
+    };
+    script.src = 'https://docs.google.com/spreadsheets/d/' + SOURCE_SHEET_ID + '/gviz/tq' +
+      '?gid=' + encodeURIComponent(gid) +
+      '&tqx=' + encodeURIComponent('out:json;responseHandler:' + callbackName) +
+      '&t=' + Date.now();
+    document.head.appendChild(script);
+  });
+}
+async function refreshClosersFromGvizJsonp() {
+  if (typeof DASHBOARD_CONFIG === 'undefined' || typeof parseCSV !== 'function') return false;
+  try {
+    var table = await loadClosersSheetJsonp(DASHBOARD_CONFIG.currentMonthGid || '1329710194');
+    var csv = closersGvizTableToCsv(table);
+    var rows = parseCSV(csv);
+    if (!rows || !rows.length) return false;
+    closersData = rows;
+    if (typeof parseSheetSettings === 'function') {
+      var sheetSettings = parseSheetSettings(csv);
+      if (sheetSettings.monthlyGoal) DASHBOARD_CONFIG.thisMonthGoal = sheetSettings.monthlyGoal;
+      if (sheetSettings.lastMonthRev) DASHBOARD_CONFIG.lastMonthRev = sheetSettings.lastMonthRev;
+    }
+    closersData.forEach(function(c) {
+      if (typeof calculateKPI === 'function') c.kpiScore = calculateKPI(c).score;
+    });
+    normalizeClosersRevenueColumns();
+    var lastUpdated = document.getElementById('lastUpdated');
+    if (lastUpdated) lastUpdated.textContent = 'Live -- updated ' + new Date().toLocaleTimeString();
+    if (typeof renderStats === 'function') renderStats();
+    if (typeof renderTable === 'function') renderTable();
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+if (typeof loadData === 'function' && !loadData.__closersGvizAware) {
+  var originalLoadDataForClosersGviz = loadData;
+  loadData = async function() {
+    var result = await originalLoadDataForClosersGviz.apply(this, arguments);
+    await refreshClosersFromGvizJsonp();
+    return result;
+  };
+  loadData.__closersGvizAware = true;
+  if (typeof window !== 'undefined') window.loadData = loadData;
+}
 function ensureClosersClosedCallRevColumn() {
   var tbody = document.getElementById('tableBody');
   if (!tbody || typeof closersData === 'undefined' || !Array.isArray(closersData)) return;
+  normalizeClosersRevenueColumns();
   var sorted = closersData.slice().sort(function(a, b) { return (b.kpiScore || 0) - (a.kpiScore || 0); });
   var totalClosedCallRev = sorted.reduce(function(sum, row) { return sum + (Number(row.closedCallRev) || 0); }, 0);
 
   var rows = tbody.querySelectorAll('tr');
   rows.forEach(function(tr) {
     var tds = tr.querySelectorAll('td');
-    if (tds.length >= 18) return;
     if (tds.length < 13) return;
 
-    var newTd = document.createElement('td');
+    var targetTd = tds.length >= 18 ? tds[12] : document.createElement('td');
     var rowLabel = tds[1] ? String(tds[1].textContent || '').trim().toUpperCase() : '';
     var rankText = tds[0] ? String(tds[0].textContent || '').trim() : '';
     var rank = parseInt(rankText, 10);
 
     if (!isNaN(rank) && rank > 0) {
       var entry = sorted[rank - 1];
-      newTd.textContent = money(entry && entry.closedCallRev ? entry.closedCallRev : 0);
-      newTd.className = 'c-white';
+      targetTd.textContent = money(entry && entry.closedCallRev ? entry.closedCallRev : 0);
+      targetTd.className = 'c-white';
     } else if (rowLabel === 'TEAM') {
-      newTd.textContent = money(totalClosedCallRev);
-      newTd.className = 'c-white';
+      targetTd.textContent = money(totalClosedCallRev);
+      targetTd.className = 'c-white';
     } else if (tr.classList.contains('pace-row')) {
-      newTd.textContent = money(0);
-      newTd.className = 'c-white';
+      targetTd.textContent = money(0);
+      targetTd.className = 'c-white';
     } else {
-      newTd.textContent = '';
+      targetTd.textContent = '';
     }
 
-    tr.insertBefore(newTd, tds[12]);
+    if (tds.length < 18) tr.insertBefore(targetTd, tds[12]);
   });
 }
 async function refreshClosedCallRevFromSource() {
@@ -4765,8 +4960,11 @@ async function refreshClosedCallRevFromSource() {
   try {
     var response = await fetch(liveUrl + '&t=' + Date.now());
     var text = await response.text();
+    var revenueMap = parseClosersRevenueMap(text);
+    applyClosersRevenueMapToRows(closersData, revenueMap);
     var map = parseClosersClosedCallRevMap(text);
     applyClosedCallRevToClosersData(map);
+    normalizeClosersRevenueColumns();
     ensureClosersClosedCallRevColumn();
     applyClosersPaceRowFix();
   } catch (err) {
@@ -4785,6 +4983,7 @@ if (typeof renderStats === 'function') {
 }
 function applyClosersPaceRowFix() {
   if (typeof closersData === 'undefined' || !Array.isArray(closersData) || !closersData.length) return;
+  normalizeClosersRevenueColumns();
   var tbody = document.getElementById('tableBody');
   if (!tbody) return;
   var paceRow = tbody.querySelector('tr.pace-row');
@@ -4863,12 +5062,17 @@ function applyClosersPaceRowFix() {
 if (typeof renderTable === 'function') {
   var originalRenderTable = renderTable;
   renderTable = function() {
+    normalizeClosersRevenueColumns();
     var result = originalRenderTable.apply(this, arguments);
+    normalizeClosersRevenueColumns();
     ensureClosersClosedCallRevColumn();
     applyClosersPaceRowFix();
-    refreshClosedCallRevFromSource();
     return result;
   };
+  if (typeof loadData === 'function' && typeof window !== 'undefined' && !window.__LGF_CLOSERS_REVENUE_RELOAD__) {
+    window.__LGF_CLOSERS_REVENUE_RELOAD__ = true;
+    setTimeout(function() { loadData(); }, 0);
+  }
 }
 function syncFundingSourceConfig() {
   if (typeof FUNDING_CONFIG === 'undefined' || typeof FUNDING_HISTORY_DATA === 'undefined') return;
