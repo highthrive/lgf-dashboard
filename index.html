@@ -4672,23 +4672,29 @@ function parseClosersClosedCallRevMap(csvText) {
   var lines = String(csvText || '').trim().split(/\r?\n/);
   if (!lines.length) return {};
   var headerIndex = -1;
-  var nameIndex = -1;
+  var nameIndex = 1; // fallback: Closers tab column B
   var closedCallRevIndex = -1;
+  var fixedClosedCallRevIndex = 12; // Closers tab column M (A=0)
 
   for (var i = 0; i < lines.length; i++) {
     var cols = csvLine(lines[i]);
     for (var j = 0; j < cols.length; j++) {
       var h = String(cols[j] || '').trim().toUpperCase();
       if (h === 'NAME') nameIndex = j;
-      if (h.indexOf('CLOSED CALL REV') >= 0) closedCallRevIndex = j;
+      if (
+        h.indexOf('CLOSED CALL REV') >= 0 ||
+        h.indexOf('CLOSED REV CALL') >= 0 ||
+        h === 'CLOSED REV'
+      ) closedCallRevIndex = j;
     }
-    if (nameIndex >= 0 && closedCallRevIndex >= 0) {
+    if (nameIndex >= 0 && (closedCallRevIndex >= 0 || cols.length > fixedClosedCallRevIndex)) {
       headerIndex = i;
       break;
     }
   }
 
-  if (headerIndex < 0 || nameIndex < 0 || closedCallRevIndex < 0) return {};
+  if (closedCallRevIndex < 0) closedCallRevIndex = fixedClosedCallRevIndex;
+  if (headerIndex < 0 || nameIndex < 0) return {};
 
   var map = {};
   for (var k = headerIndex + 1; k < lines.length; k++) {
