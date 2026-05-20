@@ -3896,6 +3896,93 @@ var _0x3297='';
 </script>
 
 <script>
+// Keep all current-month dashboard headers aligned to the source sheet's prior-day MTD cutoff.
+(function(){
+var MTD_DATE_IDS = ['headerDate','setterHeaderDate','fundingHeaderDate','csmHeaderDate','csm2HeaderDate','execHeaderDate'];
+var MTD_MONTH_NAMES = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+var applyingMtdDisplayDates = false;
+var mtdDateObserverStarted = false;
+var mtdDateTimer = null;
+
+function getMtdDisplayDate(baseDate) {
+  var d = baseDate ? new Date(baseDate) : new Date();
+  d.setDate(d.getDate() - 1);
+  return d;
+}
+
+function formatMtdDisplayDate(baseDate) {
+  var d = getMtdDisplayDate(baseDate);
+  return 'MTD - ' + MTD_MONTH_NAMES[d.getMonth()] + ' ' + String(d.getDate()).padStart(2, '0') + ', ' + d.getFullYear();
+}
+
+function shouldKeepExistingDate(el) {
+  var text = (el && el.textContent ? el.textContent : '').trim();
+  return text.indexOf('Historical') !== -1;
+}
+
+function applyMtdDisplayDates() {
+  if (applyingMtdDisplayDates) return;
+  applyingMtdDisplayDates = true;
+  var label = formatMtdDisplayDate();
+  MTD_DATE_IDS.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el || shouldKeepExistingDate(el)) return;
+    if ((el.textContent || '').trim() !== label) el.textContent = label;
+  });
+  applyingMtdDisplayDates = false;
+}
+
+function scheduleMtdDisplayDates() {
+  if (mtdDateTimer) clearTimeout(mtdDateTimer);
+  mtdDateTimer = setTimeout(applyMtdDisplayDates, 0);
+}
+
+function wrapMtdDateFunction(name) {
+  var fn = window[name];
+  if (typeof fn !== 'function' || fn.__mtdDateWrapped) return;
+  window[name] = function() {
+    var result = fn.apply(this, arguments);
+    if (result && typeof result.then === 'function') {
+      return result.then(function(value) {
+        scheduleMtdDisplayDates();
+        return value;
+      }, function(error) {
+        scheduleMtdDisplayDates();
+        throw error;
+      });
+    }
+    scheduleMtdDisplayDates();
+    return result;
+  };
+  window[name].__mtdDateWrapped = true;
+}
+
+function startMtdDateObserver() {
+  if (mtdDateObserverStarted || typeof MutationObserver === 'undefined') return;
+  var observer = new MutationObserver(function() {
+    if (!applyingMtdDisplayDates) scheduleMtdDisplayDates();
+  });
+  MTD_DATE_IDS.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) observer.observe(el, { childList: true, characterData: true, subtree: true });
+  });
+  mtdDateObserverStarted = true;
+}
+
+function initMtdDisplayDates() {
+  ['loadData','loadSetterData','loadFundingData','loadCsmData','loadCsm2Data','renderExecutiveDashboard','switchDept','showCsmDept','showCsm2Dept'].forEach(wrapMtdDateFunction);
+  startMtdDateObserver();
+  applyMtdDisplayDates();
+}
+
+window.getMtdDisplayDate = getMtdDisplayDate;
+window.formatMtdDisplayDate = formatMtdDisplayDate;
+window.applyMtdDisplayDates = applyMtdDisplayDates;
+setTimeout(initMtdDisplayDates, 0);
+})();
+</script>
+
+<script>
 // CSM T1 dashboard extension. Kept readable so future CSM T2 wiring can reuse it.
 (function(){
 var CSM_CONFIG = {
@@ -4270,7 +4357,7 @@ async function loadCsmData() {
   csmData.forEach(function(c){ if (!(c.kpiScore > 0)) c.kpiScore = calculateCsmKPI(c); });
   var now = new Date();
   var months = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
-  document.getElementById('csmHeaderDate').textContent = 'MTD - ' + months[now.getMonth()] + ' ' + String(now.getDate()).padStart(2,'0') + ', ' + now.getFullYear();
+  document.getElementById('csmHeaderDate').textContent = window.formatMtdDisplayDate ? window.formatMtdDisplayDate() : 'MTD - ' + months[now.getMonth()] + ' ' + String(now.getDate()).padStart(2,'0') + ', ' + now.getFullYear();
   var left = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate() - now.getDate();
   var leftEl = document.getElementById('csmCalcDaysLeft');
   if (leftEl) leftEl.value = left;
@@ -5621,7 +5708,7 @@ function showCsm2History(month) {
 function updateCsm2Dates() {
   var now = new Date();
   var monthNames = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
-  setText('csm2HeaderDate', monthNames[now.getMonth()] + ' ' + now.getFullYear());
+  setText('csm2HeaderDate', window.formatMtdDisplayDate ? window.formatMtdDisplayDate() : 'MTD - ' + monthNames[now.getMonth()] + ' ' + String(now.getDate()).padStart(2,'0') + ', ' + now.getFullYear());
   var days = document.getElementById('csm2CalcDaysLeft');
   if (days) days.value = daysLeftInMonth();
 }
