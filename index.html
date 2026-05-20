@@ -5058,9 +5058,6 @@ function ensureClosersClosedCallRevColumn() {
     } else if (rowLabel === 'TEAM') {
       targetTd.textContent = money(totalClosedCallRev);
       targetTd.className = 'c-white';
-    } else if (tr.classList.contains('pace-row')) {
-      targetTd.textContent = money(0);
-      targetTd.className = 'c-white';
     } else {
       targetTd.textContent = '';
     }
@@ -5102,83 +5099,13 @@ if (typeof renderStats === 'function') {
   setTimeout(applyCloserCardExactMoney, 0);
 }
 function applyClosersPaceRowFix() {
-  if (typeof closersData === 'undefined' || !Array.isArray(closersData) || !closersData.length) return;
-  normalizeClosersRevenueColumns();
   var tbody = document.getElementById('tableBody');
   if (!tbody) return;
-  var paceRow = tbody.querySelector('tr.pace-row');
-  if (!paceRow) return;
-
-  var now = new Date();
-  var daysElapsed = now.getDate();
-  if (!daysElapsed || daysElapsed < 1) daysElapsed = 1;
-  var daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-  var projected = function(v) { return (Number(v || 0) / daysElapsed) * daysInMonth; };
-
-  var totals = {
-    callsTaken: 0, booked: 0, cancelled: 0, resched: 0, noShows: 0,
-    closed: 0, refunds: 0, closedCallRev: 0, frontendRev: 0, backendRev: 0, totalRev: 0,
-    showRate: 0, conversionRate: 0, refundRate: 0
-  };
-  closersData.forEach(function(c) {
-    totals.callsTaken += Number(c.callsTaken) || 0;
-    totals.booked += Number(c.booked) || 0;
-    totals.cancelled += Number(c.cancelled) || 0;
-    totals.resched += Number(c.resched) || 0;
-    totals.noShows += Number(c.noShows) || 0;
-    totals.closed += Number(c.closed) || 0;
-    totals.refunds += Number(c.refunds) || 0;
-    totals.closedCallRev += Number(c.closedCallRev) || 0;
-    totals.frontendRev += Number(c.frontendRev) || 0;
-    totals.backendRev += Number(c.backendRev) || 0;
-    totals.totalRev += Number(c.totalRev) || 0;
-    totals.showRate += Number(c.showRate) || 0;
-    totals.conversionRate += Number(c.conversionRate) || 0;
-    totals.refundRate += Number(c.refundRate) || 0;
+  tbody.querySelectorAll('tr.pace-row').forEach(function(row) {
+    row.remove();
   });
-
-  var n = closersData.length || 1;
-  totals.showRate = totals.showRate / n;
-  totals.conversionRate = totals.conversionRate / n;
-  totals.refundRate = totals.refundRate / n;
-
-  var pCalls = Math.round(projected(totals.callsTaken));
-  var pBooked = Math.round(projected(totals.booked));
-  var pCancelled = Math.round(projected(totals.cancelled));
-  var pResched = Math.round(projected(totals.resched));
-  var pNoShows = Math.round(projected(totals.noShows));
-  var pClosed = Math.round(projected(totals.closed));
-  var pRefunds = Math.round(projected(totals.refunds));
-  var pClosedCallRev = projected(totals.closedCallRev);
-  var pFrontendRev = projected(totals.frontendRev);
-  var pBackendRev = projected(totals.backendRev);
-  var pTotalRev = projected(totals.totalRev);
-
-  var td = paceRow.querySelectorAll('td');
-  if (td.length < 18) return;
-
-  td[2].textContent = pCalls.toLocaleString('en-US');
-  td[2].className = pCalls >= GOALS.callsTaken ? 'pace-on-track' : 'pace-behind';
-  td[3].textContent = pBooked.toLocaleString('en-US');
-  td[4].textContent = pCancelled.toLocaleString('en-US');
-  td[5].textContent = pResched.toLocaleString('en-US');
-  td[6].textContent = pNoShows.toLocaleString('en-US');
-  td[7].textContent = pClosed.toLocaleString('en-US');
-  td[7].className = pClosed >= GOALS.closed ? 'pace-on-track' : 'pace-behind';
-  td[8].textContent = totals.showRate.toFixed(0) + '%';
-  td[8].className = totals.showRate >= GOALS.showRate ? 'pace-on-track' : 'pace-behind';
-  td[9].textContent = totals.conversionRate.toFixed(0) + '%';
-  td[9].className = totals.conversionRate >= GOALS.conversionRate ? 'pace-on-track' : 'pace-behind';
-  td[10].textContent = pRefunds.toLocaleString('en-US');
-  td[11].textContent = totals.refundRate.toFixed(0) + '%';
-  td[11].className = totals.refundRate <= GOALS.refundRate ? 'pace-on-track' : 'pace-behind';
-  td[12].textContent = money(pClosedCallRev);
-  td[12].className = 'c-white';
-  td[13].textContent = money(pFrontendRev);
-  td[13].className = pFrontendRev >= GOALS.frontendRev ? 'pace-on-track' : 'pace-behind';
-  td[14].textContent = money(pBackendRev);
-  td[15].textContent = money(pTotalRev);
 }
+setTimeout(applyClosersPaceRowFix, 0);
 if (typeof renderTable === 'function') {
   var originalRenderTable = renderTable;
   renderTable = function() {
