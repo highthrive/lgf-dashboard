@@ -4063,25 +4063,63 @@ function parseCsmTeamCSV(csv) {
 }
 function detectCsmGvizLayout(table) {
   var cols = table && Array.isArray(table.cols) ? table.cols : [];
-  var labels = cols.map(function(col){ return String((col && col.label) || '').toLowerCase(); });
+  var labels = cols.map(function(col){
+    return String((col && col.label) || '').replace(/\s+/g, ' ').trim().toUpperCase();
+  });
+  function find(patterns, fallback) {
+    patterns = Array.isArray(patterns) ? patterns : [patterns];
+    for (var i = 0; i < labels.length; i++) {
+      for (var j = 0; j < patterns.length; j++) {
+        if (patterns[j].test(labels[i])) return i;
+      }
+    }
+    return fallback;
+  }
+  var columns = {
+    rank: 0,
+    name: find(/\bNAME\b/, 1),
+    fullyOnboardedLeads: find(/FULLY ONBOARDED LEADS/, -1),
+    onboardingRate: find(/ONBOARDING RATE/, -1),
+    activationRate: find(/ACTIVATION RATE/, -1),
+    qaAuditRate: find(/QA AUDIT RATE/, -1),
+    smartCreditSignups: find(/SMART CREDIT SIGNUPS/, -1),
+    smartCreditConversionRate: find(/SMART CREDIT CONVERSION/, -1),
+    smartCreditRevenue: find(/SMART CREDIT REVENUE/, -1),
+    personalLoansScheduled: find(/PERSONAL LOANS SCHEDULED/, -1),
+    approvedPersonalLoansAmount: find(/APPROVED PERSONAL LOANS AMOUNT/, -1),
+    bizFundingScheduled: find(/BIZ FUNDING SCHEDULED/, -1),
+    invoicesCollected: find([/INVOICES COLLECTED/, /# OF INVOICE/], -1),
+    invoiceCollected: find([/TOTAL INVOICE COLLECTED/, /TOTAL INVOICE/], -1),
+    innerCircle: find(/INNER CIRCLE/, -1),
+    lgfPro: find(/LGF PRO/, -1),
+    testimonials: find(/TESTIMONIALS/, -1),
+    kpiScore: find([/MONTHLY KPI SCORE/, /KPI SCORE/], -1)
+  };
   return {
-    hasFullyOnboarded: labels.some(function(label){ return label.indexOf('fully onboarded leads') !== -1; }),
-    hasCallsTaken: labels.some(function(label){ return label.indexOf('calls taken') !== -1; })
+    columns: columns,
+    hasFullyOnboarded: columns.fullyOnboardedLeads >= 0,
+    hasCallsTaken: labels.some(function(label){ return label.indexOf('CALLS TAKEN') !== -1; })
   };
 }
 function buildCsmGvizRow(cols, layout) {
-  // Current live layout now uses col[2] for Fully Onboarded Leads.
-  if (layout && layout.hasFullyOnboarded && cols.length >= 19) {
+  // GVis exposes the sheet headers as column labels, so map by label instead of
+  // row width. The CSM source can hide/remove non-KPI columns without breaking sync.
+  if (layout && layout.hasFullyOnboarded) {
+    var c = layout.columns || {};
+    function at(key) {
+      var idx = c[key];
+      return idx >= 0 ? cols[idx] : '';
+    }
     return {
-      rank: num(cols[0]), name: (cols[1] || '').trim().toUpperCase(),
+      rank: num(cols[c.rank]), name: (at('name') || '').trim().toUpperCase(),
       hasLeadColumns: true,
       callsTaken: 0, cancelled: 0, noShows: 0,
-      assignedLeads: 0, onboardedLeads: num(cols[2]), onboardDaysAvg: 0,
-      onboardingRate: pct(cols[3]), activationRate: pct(cols[4]), qaAuditRate: pct(cols[5]),
-      smartCreditSignups: num(cols[6]), smartCreditConversionRate: pct(cols[7]), smartCreditRevenue: mon(cols[8]),
-      personalLoansScheduled: num(cols[9]), approvedPersonalLoansAmount: mon(cols[10]), bizFundingScheduled: num(cols[11]),
-      invoicesCollected: num(cols[12]), invoiceCollected: mon(cols[13]), innerCircle: num(cols[14]), lgfPro: num(cols[15]),
-      testimonials: num(cols[16]), kpiScore: pct(cols[17])
+      assignedLeads: 0, onboardedLeads: num(at('fullyOnboardedLeads')), onboardDaysAvg: 0,
+      onboardingRate: pct(at('onboardingRate')), activationRate: pct(at('activationRate')), qaAuditRate: pct(at('qaAuditRate')),
+      smartCreditSignups: num(at('smartCreditSignups')), smartCreditConversionRate: pct(at('smartCreditConversionRate')), smartCreditRevenue: mon(at('smartCreditRevenue')),
+      personalLoansScheduled: num(at('personalLoansScheduled')), approvedPersonalLoansAmount: mon(at('approvedPersonalLoansAmount')), bizFundingScheduled: num(at('bizFundingScheduled')),
+      invoicesCollected: num(at('invoicesCollected')), invoiceCollected: mon(at('invoiceCollected')), innerCircle: num(at('innerCircle')), lgfPro: num(at('lgfPro')),
+      testimonials: num(at('testimonials')), kpiScore: pct(at('kpiScore'))
     };
   }
   return buildCsmRow(cols);
