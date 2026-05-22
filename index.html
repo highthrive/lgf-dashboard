@@ -4172,7 +4172,7 @@ function detectCsmGvizLayout(table) {
     qaAuditRate: find(/QA AUDIT RATE/, -1),
     smartCreditSignups: find(/SMART CREDIT SIGNUPS/, -1),
     smartCreditConversionRate: find(/SMART CREDIT CONVERSION/, -1),
-    smartCreditRevenue: find(/SMART CREDIT REVENUE/, -1),
+    smartCreditRevenue: find([/TOTAL SC GROSS REVENUE/, /SC GROSS REVENUE/, /SMART CREDIT REVENUE/], -1),
     personalLoansScheduled: find(/PERSONAL LOANS SCHEDULED/, -1),
     approvedPersonalLoansAmount: find(/APPROVED PERSONAL LOANS AMOUNT/, -1),
     bizFundingScheduled: find(/BIZ FUNDING SCHEDULED/, -1),
@@ -4239,6 +4239,15 @@ function parseCsmGvizTeam(table) {
     if (((cols[1] || cols[0] || '').trim().toUpperCase()) === 'TEAM') return buildCsmGvizRow(cols, layout);
   }
   return null;
+}
+function resolveCsmTeamData(rows, teamRow) {
+  var summed = buildCsmTeam(rows || []);
+  if (!teamRow) return summed;
+  ['smartCreditRevenue','smartCreditSignups','onboardedLeads'].forEach(function(key) {
+    if (!(teamRow[key] > 0) && summed[key] > 0) teamRow[key] = summed[key];
+  });
+  teamRow.hasLeadColumns = teamRow.hasLeadColumns || summed.hasLeadColumns;
+  return teamRow;
 }
 function loadCsmSheetJsonp(gid) {
   return new Promise(function(resolve, reject) {
@@ -4335,14 +4344,14 @@ async function loadCsmData() {
     var currentRows = parseCsmGvizRows(tables[0]);
     if (currentRows.length) {
       csmData = currentRows;
-      csmTeamData = parseCsmGvizTeam(tables[0]) || buildCsmTeam(currentRows);
+      csmTeamData = resolveCsmTeamData(currentRows, parseCsmGvizTeam(tables[0]));
       document.getElementById('csmLastUpdated').textContent = 'Live -- updated ' + new Date().toLocaleTimeString();
     } else {
       loadStatus = 'parsed 0 rows from gid ' + CSM_CONFIG.currentMonthGid;
     }
     historyKeys.forEach(function(k, i){
       var rows = parseCsmGvizRows(tables[i + 1]);
-      if (rows.length) CSM_HISTORY_DATA[k] = { month: k.replace('Mar', 'March').replace('Apr', 'April'), goals: CSM_GOALS, weights: CSM_WEIGHTS, csms: rows, team: parseCsmGvizTeam(tables[i + 1]) || buildCsmTeam(rows) };
+      if (rows.length) CSM_HISTORY_DATA[k] = { month: k.replace('Mar', 'March').replace('Apr', 'April'), goals: CSM_GOALS, weights: CSM_WEIGHTS, csms: rows, team: resolveCsmTeamData(rows, parseCsmGvizTeam(tables[i + 1])) };
     });
   } catch(e) {
     loadStatus = (e && e.message) ? e.message : 'JSONP failed';
